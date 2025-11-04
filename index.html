@@ -112,7 +112,7 @@
   0% { text-shadow: 0 0 6px var(--accent); }
   50% { text-shadow: 0 0 14px var(--accent); }
   100% { text-shadow: 0 0 6px var(--accent); }
-}
+  }
   
 .price { font-weight: 700; }
 .right { text-align: right; }
@@ -123,6 +123,17 @@ th.muted,
 td.muted {
   display: none;
 }
+
+/* === Header Hover Sort Effect === */
+  thead th {
+    cursor: pointer;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+  thead th:hover {
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--accent);
+  }
+  
 </style>
 
 </head>
