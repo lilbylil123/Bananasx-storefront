@@ -318,6 +318,22 @@ function renderTable() {
 // --- Initial render + make headers sortable ---
 renderTable();
 makeSortable(head, body, renderTable);
+    // --- Search / filter function ---
+const searchInput = document.getElementById("search");
+searchInput.addEventListener("input", () => {
+  const term = searchInput.value.toLowerCase().trim();
+  const rows = tb.querySelectorAll("tr");
+
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    // Show row only if it matches the search term
+    if (!term || text.includes(term)) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+});
 
 
     // Updated time
