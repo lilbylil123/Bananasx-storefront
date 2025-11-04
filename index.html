@@ -171,7 +171,11 @@
 
   async function load(){
     const t0 = Date.now();
-    const res = await fetch(CSV_URL, {cache:"no-store"});
+    const res = await fetch(CSV_URL + "&t=" + Date.now(), {
+  cache: "no-store",
+  mode: "cors"
+});
+
     const txt = await res.text();
     const rows = parseCSV(txt).filter(r => r.length);
     if (!rows.length) return;
