@@ -176,9 +176,8 @@
 
   async function load(){
     const t0 = Date.now();
-    const res = await fetch(CSV_URL + "&t=" + Date.now(), {
-  cache: "no-store",
-  mode: "cors"
+    const res = await fetch(CSV_URL, { cache: "no-store", mode: "cors" });
+
 });
 
     const txt = await res.text();
