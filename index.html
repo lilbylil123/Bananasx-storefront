@@ -1,30 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>BananasX & Co. Storefront</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BananasX & Co. — Storefront</title>
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: #0e1116;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+  :root{
+    --bg:#0e1116;        /* page background */
+    --card:#12151c;      /* table background */
+    --row1:#1e1e1e;      /* odd row */
+    --row2:#2a2d31;      /* even row */
+    --text:#e6e6e6;      /* base text */
+    --muted:#a8a8a8;     /* secondary text */
+    --border:#2a2a2a;    /* soft borders */
+    --accent:#ffcc00;    /* BananasX gold */
   }
-  iframe {
-    border: none;
-    width: 100%;
-    height: 100vh;
-    background: #0e1116;
+  *{box-sizing:border-box}
+  html,body{
+    margin:0; background:var(--bg); color:var(--text); font:14px/1.5 system-ui,Segoe UI,Roboto,Arial;
   }
+  .wrap{
+    max-width:1100px; margin:24px auto; padding:16px;
+  }
+  .title{
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    padding:12px 16px; background:#0b0d12; border:1px solid var(--border); border-radius:12px;
+  }
+  .title h1{margin:0; font-size:18px; color:var(--accent); letter-spacing:.4px}
+  .table{
+    margin-top:14px; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--card);
+  }
+  table{width:100%; border-collapse:separate; border-spacing:0}
+  thead th{
+    background:#0e1116; color:#ffffff; text-align:left; font-weight:600; padding:10px 12px; border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:1;
+  }
+  tbody td{padding:10px 12px; border-bottom:1px solid var(--border); white-space:nowrap}
+  tbody tr:nth-child(odd){background:var(--row1)}
+  tbody tr:nth-child(even){background:var(--row2)}
+  .muted{color:var(--muted)}
+  .price{font-weight:700}
+  .right{text-align:right}
+  .center{text-align:center}
+  /* Mobile scroll */
+  .table{overflow:auto}
 </style>
 </head>
 <body>
-  <iframe
-    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xm990HH7LTwD7X8YDM8oeG35kSGPNv0ZKEohbCdm9oDHzC77_v73RVR8KHWRa5udSKHb9oyqEc4o/pubhtml?gid=613857331&single=true&widget=true&headers=false&chrome=false">
-  </iframe>
+  <div class="wrap">
+    <div class="title">
+      <h1>BananasX &amp; Co. — Live Ship Component Stock</h1>
+      <span class="muted" id="updated">Fetching…</span>
+    </div>
+
+    <div class="table">
+      <table id="grid">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th class="center">Size</th>
+            <th>Type</th>
+            <th>Grade</th>
+            <th class="center">Current Stock</th>
+            <th class="right">Sell Price</th>
+            <th class="muted">SKU</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <!-- rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+  // === Settings ===
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xm990HH7LTwD7X8YDM8oeG35kSGPNv0ZKEohbCdm9oDHzC77_v73RVR8KHWRa5udSKHb9oyqEc4o/pub?gid=613857331&single=true&output=csv";
+  const GOLD = "#ffcc00";
+
+  // Simple CSV parser (handles commas in values wrapped with quotes)
+  function parseCSV(text){
+    const rows = [];
+    let cur = [], val = "", inQuotes = false;
+    for (let i=0;i<text.length;i++){
+      const c = text[i], n = text[i+1];
+      if (inQuotes){
+        if (c === '"' && n === '"'){ val += '"'; i++; continue; }
+        if (c === '"' && n !== '"'){ inQuotes = false; continue; }
+        val += c;
+      } else {
+        if (c === '"'){ inQuotes = true; continue; }
+        if (c === ','){ cur.push(val); val = ""; continue; }
+        if (c === '\n'){ cur.push(val); rows.push(cur); cur = []; val = ""; continue; }
+        if (c === '\r'){ continue; }
+        val += c;
+      }
+    }
+    if (val.length || cur.length) { cur.push(val); rows.push(cur); }
+    return rows;
+  }
+
+  function formatPrice(x){
+    const n = Number(x);
+    if (!isFinite(n)) return x || "";
+    // Compact currency-ish (no symbol so it works globally)
+    return n >= 1_000_000 ? (n/1_000_000).toFixed(2) + "M"
+         : n >= 1_000     ? (n/1_000).toFixed(2) + "K"
+         : n.toFixed(0);
+  }
+
+  async function load(){
+    const t0 = Date.now();
+    const res = await fetch(CSV_URL, {cache:"no-store"});
+    const txt = await res.text();
+    const rows = parseCSV(txt).filter(r => r.length);
+    if (!rows.length) return;
+
+    // Expect headers in first row from your Public sheet:
+    // Name | Size | Type | Grade | Current Stock | Sell Price | SKU
+    const head = rows[0].map(s => s.trim());
+    const body = rows.slice(1);
+
+    const idx = (name) => head.indexOf(name);
+    const iName = idx("Name"),
+          iSize = idx("Size"),
+          iType = idx("Type"),
+          iGrade = idx("Grade"),
+          iStock = idx("Current Stock"),
+          iPrice = idx("Sell Price"),
+          iSku   = idx("SKU");
+
+    const tb = document.getElementById("tbody");
+    tb.innerHTML = "";
+
+    body.forEach(r => {
+      // Skip empty lines
+      if (!r[iName]) return;
+
+      const tr = document.createElement("tr");
+
+      const tdName = document.createElement("td"); tdName.textContent = r[iName] || ""; tr.appendChild(tdName);
+      const tdSize = document.createElement("td"); tdSize.textContent = r[iSize] || ""; tdSize.className="center"; tr.appendChild(tdSize);
+      const tdType = document.createElement("td"); tdType.textContent = r[iType] || ""; tr.appendChild(tdType);
+      const tdGrade= document.createElement("td"); tdGrade.textContent= r[iGrade]|| ""; tr.appendChild(tdGrade);
+
+      const stockVal = Number(r[iStock] || 0);
+      const tdStock= document.createElement("td"); tdStock.textContent = isFinite(stockVal)? stockVal : (r[iStock]||""); tdStock.className="center"; tr.appendChild(tdStock);
+
+      const tdPrice= document.createElement("td"); tdPrice.textContent = formatPrice(r[iPrice]); tdPrice.className="right price";
+      if (stockVal > 0) tdPrice.style.color = GOLD;
+      tr.appendChild(tdPrice);
+
+      const tdSku  = document.createElement("td"); tdSku.textContent   = r[iSku] || ""; tdSku.className="muted"; tr.appendChild(tdSku);
+
+      tb.appendChild(tr);
+    });
+
+    // Updated time
+    const ms = Date.now() - t0;
+    const d = new Date();
+    document.getElementById("updated").textContent = "Updated " +
+      d.toLocaleString([], {hour:'2-digit', minute:'2-digit'}) + " • " + ms + "ms";
+  }
+
+  load();
+  // Optional: refresh every 2 minutes
+  // setInterval(load, 120000);
+</script>
 </body>
 </html>
