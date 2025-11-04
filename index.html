@@ -133,6 +133,35 @@ td.muted {
     color: var(--accent);
     text-shadow: 0 0 8px var(--accent);
   }
+
+  /* === Search Bar Styling === */
+  .searchbox {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    text-align: right;
+  }
+
+  #search {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 8px;
+    width: 260px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+  }
+
+  #search:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  tr.highlight {
+    background-color: #3b3b15 !important;
+  }
+
   
 </style>
 
@@ -142,6 +171,11 @@ td.muted {
     <div class="title">
       <h1>BananasX &amp; Co. — Live Ship Component Stock</h1>
       <span class="muted" id="updated">Fetching…</span>
+    </div>
+
+    <!-- 🔍 Search bar -->
+    <div class="searchbox">
+      <input type="text" id="search" placeholder="🔍 Search components..." />
     </div>
 
     <div class="table">
