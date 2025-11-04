@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -218,30 +218,62 @@ td.muted {
           iSku   = idx("SKU");
 
     const tb = document.getElementById("tbody");
-    tb.innerHTML = "";
 
-    body.forEach(r => {
-      // Skip empty lines
-      if (!r[iName]) return;
+// --- Click-to-sort helper ---
+function makeSortable(headers, data, render) {
+  const thEls = document.querySelectorAll("thead th");
+  let sortKey = null, asc = true;
 
-      const tr = document.createElement("tr");
+  thEls.forEach((th, idx) => {
+    th.style.cursor = "pointer";
+    th.addEventListener("click", () => {
+      asc = sortKey === idx ? !asc : true;
+      sortKey = idx;
 
-      const tdName = document.createElement("td"); tdName.textContent = r[iName] || ""; tr.appendChild(tdName);
-      const tdSize = document.createElement("td"); tdSize.textContent = r[iSize] || ""; tdSize.className="center"; tr.appendChild(tdSize);
-      const tdType = document.createElement("td"); tdType.textContent = r[iType] || ""; tr.appendChild(tdType);
-      const tdGrade= document.createElement("td"); tdGrade.textContent= r[iGrade]|| ""; tr.appendChild(tdGrade);
+      data.sort((a, b) => {
+        const A = (a[idx] || "").toString().toLowerCase();
+        const B = (b[idx] || "").toString().toLowerCase();
+        const numA = parseFloat(A), numB = parseFloat(B);
+        if (!isNaN(numA) && !isNaN(numB)) return asc ? numA - numB : numB - numA;
+        return asc ? A.localeCompare(B) : B.localeCompare(A);
+      });
 
-      const stockVal = Number(r[iStock] || 0);
-      const tdStock= document.createElement("td"); tdStock.textContent = isFinite(stockVal)? stockVal : (r[iStock]||""); tdStock.className="center"; tr.appendChild(tdStock);
-
-      const tdPrice= document.createElement("td"); tdPrice.textContent = formatPrice(r[iPrice]); tdPrice.className="right price";
-      if (stockVal > 0) tdPrice.style.color = GOLD;
-      tr.appendChild(tdPrice);
-
-      const tdSku  = document.createElement("td"); tdSku.textContent   = r[iSku] || ""; tdSku.className="muted"; tr.appendChild(tdSku);
-
-      tb.appendChild(tr);
+      render();
+      thEls.forEach(h => h.style.textDecoration = "");
+      th.style.textDecoration = asc ? "underline" : "underline overline";
     });
+  });
+}
+
+// --- Render function ---
+function renderTable() {
+  tb.innerHTML = "";
+  body.forEach(r => {
+    if (!r[iName]) return;
+    const tr = document.createElement("tr");
+
+    const tdName = document.createElement("td"); tdName.textContent = r[iName] || ""; tr.appendChild(tdName);
+    const tdSize = document.createElement("td"); tdSize.textContent = r[iSize] || ""; tdSize.className="center"; tr.appendChild(tdSize);
+    const tdType = document.createElement("td"); tdType.textContent = r[iType] || ""; tr.appendChild(tdType);
+    const tdGrade= document.createElement("td"); tdGrade.textContent= r[iGrade]|| ""; tr.appendChild(tdGrade);
+
+    const stockVal = Number(r[iStock] || 0);
+    const tdStock= document.createElement("td"); tdStock.textContent = isFinite(stockVal)? stockVal : (r[iStock]||""); tdStock.className="center"; tr.appendChild(tdStock);
+
+    const tdPrice= document.createElement("td"); tdPrice.textContent = formatPrice(r[iPrice]); tdPrice.className="right price";
+    if (stockVal > 0) tdPrice.style.color = GOLD;
+    tr.appendChild(tdPrice);
+
+    const tdSku  = document.createElement("td"); tdSku.textContent   = r[iSku] || ""; tdSku.className="muted"; tr.appendChild(tdSku);
+
+    tb.appendChild(tr);
+  });
+}
+
+// --- Initial render + make headers sortable ---
+renderTable();
+makeSortable(head, body, renderTable);
+
 
     // Updated time
     const ms = Date.now() - t0;
