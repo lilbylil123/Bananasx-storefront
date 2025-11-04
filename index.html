@@ -6,6 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>BananasX & Co. — Storefront</title>
+
+  <!-- 🚀 Nova UI font (Orbitron) -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+  
 <style>
   :root {
     --bg: #0e1116;
@@ -134,33 +138,51 @@ td.muted {
     text-shadow: 0 0 8px var(--accent);
   }
 
-  /* === Search Bar Styling === */
-  .searchbox {
-    margin-top: 16px;
-    margin-bottom: 8px;
-    text-align: right;
-  }
+  /* === Nova-Style Search Bar === */
+.searchbox {
+  margin: 20px auto 14px auto;
+  text-align: center;
+}
 
-  #search {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 12px;
-    border-radius: 8px;
-    width: 260px;
-    font-size: 14px;
-    outline: none;
-    transition: border 0.2s, box-shadow 0.2s;
-  }
+#search {
+  background: rgba(15, 18, 25, 0.85);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  padding: 10px 16px;
+  border-radius: 12px;
+  width: 360px;
+  font-size: 15px;
+  font-family: 'Orbitron', system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  outline: none;
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.1);
+  transition: all 0.25s ease-in-out;
+}
 
-  #search:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
-  }
+#search::placeholder {
+  color: #777;
+  text-transform: none;
+}
 
-  tr.highlight {
-    background-color: #3b3b15 !important;
-  }
+#search:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 16px var(--accent);
+  background: rgba(25, 28, 35, 0.95);
+  color: #fff5cc;
+  transform: scale(1.02);
+  animation: inputGlow 1.8s infinite;
+}
+
+@keyframes inputGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 204, 0, 0.15); }
+  50% { box-shadow: 0 0 20px rgba(255, 204, 0, 0.4); }
+}
+
+tr.highlight {
+  background-color: #3b3b15 !important;
+}
 
   
 </style>
