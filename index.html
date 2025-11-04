@@ -175,14 +175,14 @@
   }
 
   async function load(){
-    const t0 = Date.now();
-    const res = await fetch(CSV_URL, { cache: "no-store", mode: "cors" });
+  const t0 = Date.now();
+  const res = await fetch(CSV_URL, { cache: "no-store", mode: "cors" });
+  const txt = await res.text();
+  const rows = parseCSV(txt).filter(r => r.length);
+  if (!rows.length) return;
+  ...
+}
 
-});
-
-    const txt = await res.text();
-    const rows = parseCSV(txt).filter(r => r.length);
-    if (!rows.length) return;
 
     // Expect headers in first row from your Public sheet:
     // Name | Size | Type | Grade | Current Stock | Sell Price | SKU
