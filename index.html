@@ -5,46 +5,106 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>BananasX & Co. — Storefront</title>
 <style>
-  :root{
-    --bg:#0e1116;        /* page background */
-    --card:#12151c;      /* table background */
-    --row1:#1e1e1e;      /* odd row */
-    --row2:#2a2d31;      /* even row */
-    --text:#e6e6e6;      /* base text */
-    --muted:#a8a8a8;     /* secondary text */
-    --border:#2a2a2a;    /* soft borders */
-    --accent:#ffcc00;    /* BananasX gold */
+  :root {
+    --bg: #0e1116;
+    --card: #12151c;
+    --row1: #1e1e1e;
+    --row2: #2a2d31;
+    --text: #e6e6e6;
+    --muted: #a8a8a8;
+    --border: #2a2a2a;
+    --accent: #ffcc00;
   }
-  *{box-sizing:border-box}
-  html,body{
-    margin:0; background:var(--bg); color:var(--text); font:14px/1.5 system-ui,Segoe UI,Roboto,Arial;
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.5 system-ui, Segoe UI, Roboto, Arial;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;        /* ✅ hides any horizontal overflow */
+    overflow-y: auto;
   }
-  .wrap{
-    max-width:1100px; margin:24px auto; padding:16px;
+
+  * {
+    box-sizing: border-box;
   }
-  .title{
-    display:flex; justify-content:space-between; align-items:center; gap:16px;
-    padding:12px 16px; background:#0b0d12; border:1px solid var(--border); border-radius:12px;
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg);     /* ✅ fills background completely */
+    z-index: -1;
   }
-  .title h1{margin:0; font-size:18px; color:var(--accent); letter-spacing:.4px}
-  .table{
-    margin-top:14px; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--card);
+
+  .wrap {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 16px;
+    overflow-x: hidden;        /* ✅ prevents table overflow */
   }
-  table{width:100%; border-collapse:separate; border-spacing:0}
-  thead th{
-    background:#0e1116; color:#ffffff; text-align:left; font-weight:600; padding:10px 12px; border-bottom:1px solid var(--border);
-    position:sticky; top:0; z-index:1;
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    background: #0b0d12;
+    border: 1px solid var(--border);
+    border-radius: 12px;
   }
-  tbody td{padding:10px 12px; border-bottom:1px solid var(--border); white-space:nowrap}
-  tbody tr:nth-child(odd){background:var(--row1)}
-  tbody tr:nth-child(even){background:var(--row2)}
-  .muted{color:var(--muted)}
-  .price{font-weight:700}
-  .right{text-align:right}
-  .center{text-align:center}
-  /* Mobile scroll */
-  .table{overflow:auto}
-</style>
+
+  .title h1 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 0.4px;
+  }
+
+  .table {
+    margin-top: 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow-x: auto;
+    background: var(--card);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 100%;
+  }
+
+  thead th {
+    background: #0e1116;
+    color: #ffffff;
+    text-align: left;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody tr:nth-child(odd) { background: var(--row1); }
+  tbody tr:nth-child(even) { background: var(--row2); }
+
+  .muted { color: var(--muted); }
+  .price { font-weight: 700; }
+  .right { text-align: right; }
+  .center { text-a
+
 </head>
 <body>
   <div class="wrap">
