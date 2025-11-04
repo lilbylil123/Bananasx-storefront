@@ -178,6 +178,7 @@
   const t0 = Date.now();
   const res = await fetch(CSV_URL, { cache: "no-store", mode: "cors" });
   const txt = await res.text();
+      console.log("CSV text preview:", txt.slice(0, 500));
   const rows = parseCSV(txt).filter(r => r.length);
   if (!rows.length) return;
   ...
