@@ -23,15 +23,17 @@
   }
 
   html, body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg);
-    color: var(--text);
-    font: 14px/1.5 system-ui, Segoe UI, Roboto, Arial;
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;        /* ✅ hides any horizontal overflow */
-    overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  background: url("Corsair.png") no-repeat center center fixed;
+  background-size: cover;
+  background-color: #0e1116; /* fallback if image fails */
+  color: var(--text);
+  font: 14px/1.5 system-ui, Segoe UI, Roboto, Arial;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   }
 
   * {
@@ -39,11 +41,11 @@
   }
 
   body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: var(--bg);     /* ✅ fills background completely */
-    z-index: -1;
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: transparent; /* <- important */
+  z-index: -1;
   }
 
   .wrap {
