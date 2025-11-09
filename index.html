@@ -213,36 +213,52 @@ tr.highlight {
   transform: scale(1.05);
 }
 
-  .quality-section {
+/* ✅ HOLO-GLASS PANEL UPGRADE */
+.quality-section {
   margin: 30px auto;
-  padding: 20px;
-  background: rgba(10, 12, 18, 0.7);
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  padding: 24px 28px;
   max-width: 900px;
+  line-height: 1.65;
   font-size: 15px;
-  line-height: 1.6;
+
+  /* Holo glass magic */
+  background: rgba(14, 17, 22, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 204, 0, 0.35);
+  border-radius: 14px;
+  box-shadow: 0 0 24px rgba(255, 204, 0, 0.08);
+  transition: 0.35s ease;
+}
+
+.quality-section:hover {
+  /* Hover glow effect */
+  box-shadow: 0 0 38px rgba(255, 204, 0, 0.25);
+  border-color: rgba(255, 204, 0, 0.55);
 }
 
 .quality-section h2,
 .quality-section h3 {
   font-family: 'Orbitron', sans-serif;
   color: var(--accent);
-  margin-top: 0;
   text-align: center;
+  margin-top: 0;
+  letter-spacing: 1px;
 }
 
 .disclaimer-box {
-  margin-top: 20px;
-  padding: 16px;
-  background: rgba(255, 204, 0, 0.05);
-  border-left: 4px solid var(--accent);
-  border-radius: 6px;
+  margin-top: 22px;
+  padding: 18px;
+  background: rgba(255, 204, 0, 0.06);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  backdrop-filter: blur(6px);
 }
 
 .disclaimer-box ul {
-  margin-left: 20px;
-  padding-left: 10px;
+  margin-left: 22px;
+  padding-left: 6px;
 }
 
 .thanks-line {
