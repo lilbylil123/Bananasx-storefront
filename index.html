@@ -436,6 +436,7 @@ const CSV_URL = "https://corsproxy.io/?" + encodeURIComponent("https://docs.goog
           iStock = idx("Current Stock"),
           iPrice = idx("Sell Price"),
           iSku   = idx("SKU");
+          iCategory = idk("Category");
 
     const tb = document.getElementById("tbody");
 
@@ -470,7 +471,9 @@ function renderTable() {
   tb.innerHTML = "";
   body.forEach(r => {
     if (!r[iName]) return;
-    const tr = document.createElement("tr");
+   const tr = document.createElement("tr");
+      tr.setAttribute("data-category", (r[iCategory] || "other").toLowerCase());
+
 
     const tdName = document.createElement("td"); tdName.textContent = r[iName] || ""; tr.appendChild(tdName);
     const tdSize = document.createElement("td"); tdSize.textContent = r[iSize] || ""; tdSize.className="center"; tr.appendChild(tdSize);
