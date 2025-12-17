@@ -540,7 +540,9 @@ function renderTable() {
   body.forEach(r => {
     if (!r[iName]) return;
    const tr = document.createElement("tr");
-      tr.setAttribute("data-category", (r[iCategory] || "other").toLowerCase());
+      tr.setAttribute("data-category",(r[iCategory] || "components").toLowerCase()
+);
+
 
 
     const tdName = document.createElement("td"); tdName.textContent = r[iName] || ""; tr.appendChild(tdName);
@@ -561,13 +563,13 @@ function renderTable() {
   });
 }
 
-    // --- Initial render + make headers sortable ---
+   // --- Initial render + make headers sortable ---
 renderTable();
 makeSortable(head, body, renderTable);
 
-    // 🔒 Default view = Components
-applyCategoryFilter("components");
- 
+// ✅ APPLY FILTERS AFTER ROWS EXIST
+applyAllFilters();
+
 
     // Updated time
     const ms = Date.now() - t0;
