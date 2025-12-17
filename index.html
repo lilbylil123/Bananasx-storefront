@@ -672,6 +672,7 @@ document.querySelectorAll(".filter-pill").forEach(pill => {
     const group = pill.dataset.filter;
     const value = pill.dataset.value;
 
+    // Clear active state for this group
     document
       .querySelectorAll(`.filter-pill[data-filter="${group}"]`)
       .forEach(p => p.classList.remove("active"));
@@ -679,9 +680,35 @@ document.querySelectorAll(".filter-pill").forEach(pill => {
     pill.classList.add("active");
     quickFilters[group] = value;
 
+    // 🚫 Game rule: Size 3 Stealth does not exist
+    const stealthPill = document.querySelector(
+      '.filter-pill[data-filter="grade"][data-value="A Stealth"]'
+    );
+
+    if (group === "size" && value === "3") {
+      // Hide stealth option
+      if (stealthPill) stealthPill.style.display = "none";
+
+      // Reset grade if stealth was active
+      if (quickFilters.grade === "A Stealth") {
+        quickFilters.grade = "all";
+        document
+          .querySelectorAll('.filter-pill[data-filter="grade"]')
+          .forEach(p => p.classList.remove("active"));
+
+        document
+          .querySelector('.filter-pill[data-filter="grade"][data-value="all"]')
+          ?.classList.add("active");
+      }
+    } else {
+      // Restore stealth option for S1 / S2 / ALL
+      if (stealthPill) stealthPill.style.display = "";
+    }
+
     applyAllFilters();
   });
 });
+
 
 // === Search input hooks into master filter ===
 document
