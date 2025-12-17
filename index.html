@@ -185,6 +185,55 @@ td.muted {
 tr.highlight {
   background-color: #3b3b15 !important;
 }
+  /* === Quick Filters (Nova / RSI Style) === */
+.quick-filters {
+  margin: 6px auto 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.filter-label {
+  font-size: 0.7rem;
+  color: #777;
+  letter-spacing: 1px;
+  margin-right: 4px;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.filter-pill {
+  background: rgba(15, 18, 25, 0.85);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: 'Orbitron', system-ui, sans-serif;
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s ease-in-out;
+}
+
+.filter-pill:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.25);
+}
+
+.filter-pill.active {
+  background: var(--accent);
+  color: #000;
+  box-shadow: 0 0 14px rgba(255, 204, 0, 0.6);
+}
+
 
 /* === Place Order Button === */
 .order-button-box {
@@ -345,6 +394,24 @@ tr.highlight {
     <div class="searchbox">
       <input type="text" id="search" placeholder="🔍 Search components..." />
     </div>
+    <!-- 🔧 Quick Filters -->
+<div class="quick-filters">
+  <div class="filter-group">
+    <span class="filter-label">SIZE</span>
+    <button class="filter-pill active" data-filter="size" data-value="all">ALL</button>
+    <button class="filter-pill" data-filter="size" data-value="1">S1</button>
+    <button class="filter-pill" data-filter="size" data-value="2">S2</button>
+    <button class="filter-pill" data-filter="size" data-value="3">S3</button>
+  </div>
+
+  <div class="filter-group">
+    <span class="filter-label">GRADE</span>
+    <button class="filter-pill" data-filter="grade" data-value="A Military">A-MIL</button>
+    <button class="filter-pill" data-filter="grade" data-value="A Stealth">A-STEALTH</button>
+    <button class="filter-pill" data-filter="grade" data-value="B Military">B-MIL</button>
+  </div>
+</div>
+
 
     <!-- 🔥 Category Filter Buttons -->
 <div class="category-nav">
