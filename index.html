@@ -558,9 +558,13 @@ function renderTable() {
   });
 }
 
-// --- Initial render + make headers sortable ---
+    // --- Initial render + make headers sortable ---
 renderTable();
 makeSortable(head, body, renderTable);
+
+    // 🔒 Default view = Components
+applyCategoryFilter("components");
+ 
     // --- Search / filter function ---
 const searchInput = document.getElementById("search");
 searchInput.addEventListener("input", () => {
