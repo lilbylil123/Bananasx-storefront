@@ -570,7 +570,7 @@ applyCategoryFilter("components");
  
     // --- Search / filter function ---
 const searchInput = document.getElementById("search");
-searchInput.addEventListener("input", () => {
+searchInput.addEventListener("input", applyAllFilters() => {
   const term = searchInput.value.toLowerCase().trim();
   const rows = tb.querySelectorAll("tr");
 
@@ -596,7 +596,13 @@ searchInput.addEventListener("input", () => {
   load();
   // Optional: refresh every 2 minutes
   // setInterval(load, 120000);
-  
+
+  // === Quick Filter State ===
+let quickFilters = {
+  size: "all",
+  grade: "all"
+};
+
   // === Category Tabs (Context-Aware) ===
 document.querySelectorAll(".cat-btn").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -630,9 +636,60 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
     }
 
     applyAllFilters();
+
+    // === Master Filter: Search + Category + Size + Grade ===
+function applyAllFilters() {
+  const searchTerm = document.getElementById("search").value
+    .toLowerCase()
+    .trim();
+
+  const activeCategory =
+    document.querySelector(".cat-btn.active")?.dataset.category || "components";
+
+  document.querySelectorAll("#tbody tr").forEach(row => {
+    const text = row.textContent.toLowerCase();
+    const size = row.children[1]?.textContent.trim();
+    const grade = row.children[3]?.textContent.trim();
+    const category = row.dataset.category;
+
+    let visible = true;
+
+    // Search filter
+    if (searchTerm && !text.includes(searchTerm)) visible = false;
+
+    // Category filter
+    if (category !== activeCategory) visible = false;
+
+    // Size filter
+    if (quickFilters.size !== "all" && size !== quickFilters.size) visible = false;
+
+    // Grade filter
+    if (quickFilters.grade !== "all" && grade !== quickFilters.grade) visible = false;
+
+    row.style.display = visible ? "" : "none";
+// === Size & Grade Pill Click Handling ===
+document.querySelectorAll(".filter-pill").forEach(pill => {
+  pill.addEventListener("click", () => {
+    const group = pill.dataset.filter;   // "size" or "grade"
+    const value = pill.dataset.value;
+
+    // Clear active state for this group
+    document
+      .querySelectorAll(`.filter-pill[data-filter="${group}"]`)
+      .forEach(p => p.classList.remove("active"));
+
+    // Activate clicked pill
+    pill.classList.add("active");
+
+    // Update filter state
+    quickFilters[group] = value;
+
+    // Reapply all filters
+    applyAllFilters();
+
+    
   });
 });
-
 
 </script>
 </body>
