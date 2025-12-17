@@ -596,31 +596,43 @@ searchInput.addEventListener("input", () => {
   load();
   // Optional: refresh every 2 minutes
   // setInterval(load, 120000);
-
-  // === Category Filter ===
-function applyCategoryFilter(category) {
-  const rows = document.querySelectorAll("#tbody tr");
-
-  rows.forEach(row => {
-    const cat = row.getAttribute("data-category");
-
-    if (category === "all" || category === cat) {
-      row.style.display = "";
-    } else {
-      row.style.display = "none";
-    }
-  });
-}
-
+  
+  // === Category Tabs (Context-Aware) ===
 document.querySelectorAll(".cat-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
-    const cat = btn.getAttribute("data-category");
-    applyCategoryFilter(cat);
+    const cat = btn.dataset.category;
+
+    // COMPONENTS → Size + Grade
+    if (cat === "components") {
+      document.querySelector(".quick-filters").style.display = "flex";
+      document.getElementById("filter-size").style.display = "flex";
+      document.getElementById("filter-grade").style.display = "flex";
+    }
+
+    // WEAPONS → Size only
+    if (cat === "weapons") {
+      document.querySelector(".quick-filters").style.display = "flex";
+      document.getElementById("filter-size").style.display = "flex";
+      document.getElementById("filter-grade").style.display = "none";
+
+      // Reset grade so it cannot affect weapons
+      quickFilters.grade = "all";
+      document
+        .querySelectorAll('.filter-pill[data-filter="grade"]')
+        .forEach(p => p.classList.remove("active"));
+
+      document
+        .querySelector('.filter-pill[data-filter="grade"][data-value="all"]')
+        ?.classList.add("active");
+    }
+
+    applyAllFilters();
   });
 });
+
 
 </script>
 </body>
