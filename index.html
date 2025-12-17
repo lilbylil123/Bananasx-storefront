@@ -348,13 +348,21 @@ tr.highlight {
   border-color: var(--accent);
 }
 
-   /* === Filter Labels (SIZE / GRADE) === */
-  .filter-label {
-    color: #ffcc00;                 /* Nova gold */
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-shadow: 0 0 6px rgba(255, 204, 0, 0.35);
+  /* === Filter Labels (SIZE / GRADE) — High Readability === */
+.filter-label {
+  color: #ffcc00;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+
+  background: rgba(0, 0, 0, 0.55);
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  box-shadow:
+    0 0 8px rgba(255, 204, 0, 0.35),
+    inset 0 0 0 1px rgba(255, 204, 0, 0.35);
   }
 </style>
 
