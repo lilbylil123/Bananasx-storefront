@@ -568,23 +568,6 @@ makeSortable(head, body, renderTable);
     // 🔒 Default view = Components
 applyCategoryFilter("components");
  
-    // --- Search / filter function ---
-const searchInput = document.getElementById("search");
-searchInput.addEventListener("input", applyAllFilters() => {
-  const term = searchInput.value.toLowerCase().trim();
-  const rows = tb.querySelectorAll("tr");
-
-  rows.forEach(row => {
-    const text = row.textContent.toLowerCase();
-    // Show row only if it matches the search term
-    if (!term || text.includes(term)) {
-      row.style.display = "";
-    } else {
-      row.style.display = "none";
-    }
-  });
-});
-
 
     // Updated time
     const ms = Date.now() - t0;
@@ -597,13 +580,37 @@ searchInput.addEventListener("input", applyAllFilters() => {
   // Optional: refresh every 2 minutes
   // setInterval(load, 120000);
 
-  // === Quick Filter State ===
+// === Quick Filter State ===
 let quickFilters = {
   size: "all",
   grade: "all"
 };
+// === Master Filter: Search + Category + Size + Grade ===
+function applyAllFilters() {
+  const searchTerm = document.getElementById("search").value
+    .toLowerCase()
+    .trim();
 
-  // === Category Tabs (Context-Aware) ===
+  const activeCategory =
+    document.querySelector(".cat-btn.active")?.dataset.category || "components";
+
+  document.querySelectorAll("#tbody tr").forEach(row => {
+    const text = row.textContent.toLowerCase();
+    const size = row.children[1]?.textContent.trim();
+    const grade = row.children[3]?.textContent.trim();
+    const category = row.dataset.category;
+
+    let visible = true;
+
+    if (searchTerm && !text.includes(searchTerm)) visible = false;
+    if (category !== activeCategory) visible = false;
+    if (quickFilters.size !== "all" && size !== quickFilters.size) visible = false;
+    if (quickFilters.grade !== "all" && grade !== quickFilters.grade) visible = false;
+
+    row.style.display = visible ? "" : "none";
+  });
+}
+// === Category Tabs (Context-Aware) ===
 document.querySelectorAll(".cat-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
@@ -624,7 +631,7 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
       document.getElementById("filter-size").style.display = "flex";
       document.getElementById("filter-grade").style.display = "none";
 
-      // Reset grade so it cannot affect weapons
+      // Reset grade
       quickFilters.grade = "all";
       document
         .querySelectorAll('.filter-pill[data-filter="grade"]')
@@ -636,61 +643,29 @@ document.querySelectorAll(".cat-btn").forEach(btn => {
     }
 
     applyAllFilters();
-
-    // === Master Filter: Search + Category + Size + Grade ===
-function applyAllFilters() {
-  const searchTerm = document.getElementById("search").value
-    .toLowerCase()
-    .trim();
-
-  const activeCategory =
-    document.querySelector(".cat-btn.active")?.dataset.category || "components";
-
-  document.querySelectorAll("#tbody tr").forEach(row => {
-    const text = row.textContent.toLowerCase();
-    const size = row.children[1]?.textContent.trim();
-    const grade = row.children[3]?.textContent.trim();
-    const category = row.dataset.category;
-
-    let visible = true;
-
-    // Search filter
-    if (searchTerm && !text.includes(searchTerm)) visible = false;
-
-    // Category filter
-    if (category !== activeCategory) visible = false;
-
-    // Size filter
-    if (quickFilters.size !== "all" && size !== quickFilters.size) visible = false;
-
-    // Grade filter
-    if (quickFilters.grade !== "all" && grade !== quickFilters.grade) visible = false;
-
-    row.style.display = visible ? "" : "none";
+  });
+});
 // === Size & Grade Pill Click Handling ===
 document.querySelectorAll(".filter-pill").forEach(pill => {
   pill.addEventListener("click", () => {
-    const group = pill.dataset.filter;   // "size" or "grade"
+    const group = pill.dataset.filter;
     const value = pill.dataset.value;
 
-    // Clear active state for this group
     document
       .querySelectorAll(`.filter-pill[data-filter="${group}"]`)
       .forEach(p => p.classList.remove("active"));
 
-    // Activate clicked pill
     pill.classList.add("active");
-
-    // Update filter state
     quickFilters[group] = value;
 
-    // Reapply all filters
     applyAllFilters();
-
-    
   });
 });
 
+// === Search input hooks into master filter ===
+document
+  .getElementById("search")
+  .addEventListener("input", applyAllFilters);
 </script>
 </body>
 </html>
