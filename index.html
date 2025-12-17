@@ -364,11 +364,39 @@ tr.highlight {
     0 0 8px rgba(255, 204, 0, 0.35),
     inset 0 0 0 1px rgba(255, 204, 0, 0.35);
   }
+  
+/* === Grade Pill Color Coding === */
+
+/* A Military */
+.filter-pill[data-filter="grade"][data-value="A Military"] {
+  border-color: #ffcc00;
+  color: #ffcc00;
+  box-shadow: 0 0 6px rgba(255, 204, 0, 0.25);
+}
+
+/* A Stealth */
+.filter-pill[data-filter="grade"][data-value="A Stealth"] {
+  border-color: #4fd3ff;
+  color: #4fd3ff;
+  box-shadow: 0 0 6px rgba(79, 211, 255, 0.25);
+}
+
+/* B Military */
+.filter-pill[data-filter="grade"][data-value="B Military"] {
+  border-color: #9aa0a6;
+  color: #9aa0a6;
+  box-shadow: 0 0 6px rgba(154, 160, 166, 0.2);
+}
+
+/* Active pill enhancement */
+.filter-pill.active {
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 12px currentColor;
+}   
 </style>
 
-    
-</style>
 
+  
 </head>
 <body>
   <div class="wrap">
