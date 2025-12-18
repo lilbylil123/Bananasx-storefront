@@ -705,6 +705,15 @@ document.querySelectorAll(".filter-pill").forEach(pill => {
     const group = pill.dataset.filter;
     const value = pill.dataset.value;
 
+        // 🚫 Hard guard: Size 3 Stealth cannot be selected
+    if (
+      group === "grade" &&
+      value === "A Stealth" &&
+      quickFilters.size === "3"
+    ) {
+      return;
+    }
+
     // Clear active state for this group
     document
       .querySelectorAll(`.filter-pill[data-filter="${group}"]`)
@@ -734,9 +743,12 @@ document.querySelectorAll(".filter-pill").forEach(pill => {
           ?.classList.add("active");
       }
     } else {
-      // Restore stealth option for S1 / S2 / ALL
-      if (stealthPill) stealthPill.style.display = "";
-    }
+  // Only restore Stealth if size is NOT S3
+  if (quickFilters.size !== "3" && stealthPill) {
+    stealthPill.style.display = "";
+  }
+}
+
 
     applyAllFilters();
   });
