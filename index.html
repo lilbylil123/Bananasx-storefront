@@ -814,6 +814,30 @@ document.querySelectorAll(".filter-pill").forEach(pill => {
 document
   .getElementById("search")
   .addEventListener("input", applyAllFilters);
+
+  /* ===== ORDER MODAL LOGIC ===== */
+
+const placeOrderBtn = document.getElementById("placeOrderBtn");
+const orderModal = document.getElementById("orderModal");
+const closeOrderBtn = document.getElementById("closeOrder");
+
+if (placeOrderBtn) {
+  placeOrderBtn.addEventListener("click", () => {
+    orderModal.classList.remove("hidden");
+  });
+}
+
+if (closeOrderBtn) {
+  closeOrderBtn.addEventListener("click", () => {
+    orderModal.classList.add("hidden");
+  });
+}
+
+// Close modal if clicking outside content
+orderModal?.addEventListener("click", e => {
+  if (e.target === orderModal) {
+    orderModal.classList.add("hidden");
+  
 </script>
 </body>
 </html>
