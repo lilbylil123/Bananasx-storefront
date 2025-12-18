@@ -902,6 +902,42 @@ orderModal?.addEventListener("click", e => {
     orderModal.classList.add("hidden");
   }
 });
+
+  /* ===== POPULATE ORDER ITEM DROPDOWNS ===== */
+
+function getVisibleItems() {
+  const rows = document.querySelectorAll("#tbody tr");
+  const items = [];
+
+  rows.forEach(row => {
+    if (row.style.display === "none") return;
+
+    const nameCell = row.querySelector("td");
+    if (nameCell) {
+      items.push(nameCell.textContent.trim());
+    }
+  });
+
+  return items;
+}
+
+function populateOrderSelect(select) {
+  select.innerHTML = "";
+  const items = getVisibleItems();
+
+  items.forEach(item => {
+    const opt = document.createElement("option");
+    opt.value = item;
+    opt.textContent = item;
+    select.appendChild(opt);
+  });
+}
+
+// Populate initial dropdown when modal opens
+placeOrderBtn?.addEventListener("click", () => {
+  document.querySelectorAll(".order-item").forEach(populateOrderSelect);
+});
+
   
 </script>
 </body>
