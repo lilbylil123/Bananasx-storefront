@@ -105,6 +105,15 @@
     white-space: nowrap;
   }
 
+  /* === Zebra Striping (JS-controlled) === */
+tbody tr.row-even {
+  background-color: var(--row1);
+}
+
+tbody tr.row-odd {
+  background-color: var(--row2);
+}
+
   .muted {
   color: var(--accent);
   text-shadow: 0 0 8px var(--accent);
