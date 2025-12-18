@@ -854,7 +854,7 @@ document.querySelectorAll(".filter-pill").forEach(pill => {
           .querySelector('.filter-pill[data-filter="grade"][data-value="all"]')
           ?.classList.add("active");
       }
-    } else {
+  
   // Only restore Stealth if size is NOT S3
   if (quickFilters.size !== "3" && stealthPill) {
     stealthPill.style.display = "";
