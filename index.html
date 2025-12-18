@@ -501,6 +501,41 @@ tr.highlight {
     </div>
   </div>
 
+  <!-- 🛒 Order Modal -->
+<div id="orderModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Place Order</h2>
+
+    <label>
+      Item
+      <select id="orderItem"></select>
+    </label>
+
+    <label>
+      Quantity
+      <input type="number" id="orderQty" min="1" value="1" />
+    </label>
+
+    <label>
+      Discord Handle
+      <input type="text" id="orderDiscord" placeholder="Name#1234" />
+    </label>
+
+    <label>
+      Notes (optional)
+      <textarea id="orderNotes"></textarea>
+    </label>
+
+    <div class="modal-actions">
+      <button id="submitOrder">Submit Order</button>
+      <button id="closeOrder">Cancel</button>
+    </div>
+
+    <p id="orderStatus" class="muted"></p>
+  </div>
+</div>
+
+
 
            
 <script>
