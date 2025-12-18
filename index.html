@@ -559,48 +559,45 @@ tr.highlight {
     </div>
   </div>
 
- <!-- 🛒 Order Modal -->
+<!-- 🛒 Order Modal -->
 <div id="orderModal" class="modal hidden">
   <div class="modal-content">
     <h2>Place Order</h2>
 
+    <!-- ITEMS CONTAINER (REQUIRED) -->
     <div id="orderItems">
       <div class="order-row">
-        <select class="order-item"></select>
-        <input type="number" class="order-qty" min="1" value="1" />
+        <label>
+          Item
+          <select class="order-item"></select>
+        </label>
+
+        <label>
+          Quantity
+          <input
+            type="number"
+            class="order-qty"
+            min="1"
+            value="1"
+          />
+        </label>
       </div>
     </div>
 
-    <button type="button" id="addOrderItem" class="add-item-btn">
-  + Add another item
-</button>
+    <!-- ADD ITEM BUTTON (REQUIRED ID) -->
+    <button
+      type="button"
+      id="addOrderItem"
+      class="add-item-btn"
+    >
+      + Add another item
+    </button>
 
     <label>
       Delivery Required?
-      <select id="orderDelivery">
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
-      </select>
-    </label>
+      <select id="deliveryRequired">
+        <option value="No
 
-    <label>
-      Discord Handle
-      <input type="text" id="orderDiscord" placeholder="Name#1234" />
-    </label>
-
-    <label>
-      Notes (optional)
-      <textarea id="orderNotes"></textarea>
-    </label>
-
-    <div class="modal-actions">
-      <button id="submitOrder">Submit Order</button>
-      <button id="closeOrder">Cancel</button>
-    </div>
-
-    <p id="orderStatus" class="muted"></p>
-  </div>
-</div>
 
            
 <script>
