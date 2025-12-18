@@ -571,7 +571,9 @@ tr.highlight {
       </div>
     </div>
 
-    <button id="addItemRow">+ Add another item</button>
+    <button type="button" id="addOrderItem" class="add-item-btn">
+  + Add another item
+</button>
 
     <label>
       Delivery Required?
@@ -937,6 +939,54 @@ function populateOrderSelect(select) {
 placeOrderBtn?.addEventListener("click", () => {
   document.querySelectorAll(".order-item").forEach(populateOrderSelect);
 });
+
+  /* ===== ADD MULTIPLE ORDER ITEMS ===== */
+
+const addOrderItemBtn = document.getElementById("addOrderItem");
+const orderItemsContainer = document.getElementById("orderItems");
+
+addOrderItemBtn?.addEventListener("click", () => {
+  const firstRow = orderItemsContainer.querySelector(".order-row");
+  const newRow = firstRow.cloneNode(true);
+
+  // Reset quantity
+  newRow.querySelector(".order-qty").value = 1;
+
+  orderItemsContainer.appendChild(newRow);
+
+  // Repopulate dropdowns so filters apply
+  populateOrderSelect(newRow.querySelector(".order-item"));
+});
+
+  /* ===== SUBMIT ORDER ===== */
+
+document.getElementById("submitOrder")?.addEventListener("click", () => {
+  const items = [];
+
+  document.querySelectorAll(".order-row").forEach(row => {
+    const item = row.querySelector(".order-item").value;
+    const qty = row.querySelector(".order-qty").value;
+
+    if (item && qty > 0) {
+      items.push({ item, quantity: Number(qty) });
+    }
+  });
+
+  const order = {
+    items,
+    delivery: document.getElementById("orderDelivery").value,
+    discord: document.getElementById("orderDiscord").value.trim(),
+    notes: document.getElementById("orderNotes").value.trim(),
+    timestamp: new Date().toISOString()
+  };
+
+  console.log("ORDER PAYLOAD:", order);
+
+  // TEMP success feedback
+  alert("Order captured. Check console.");
+});
+
+
 
   
 </script>
