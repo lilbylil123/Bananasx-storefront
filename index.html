@@ -871,6 +871,8 @@ document
   .getElementById("search")
   .addEventListener("input", applyAllFilters);
 
+  });
+
   /* ===== ORDER MODAL LOGIC ===== */
 
 const placeOrderBtn = document.getElementById("placeOrderBtn");
@@ -893,6 +895,8 @@ if (closeOrderBtn) {
 orderModal?.addEventListener("click", e => {
   if (e.target === orderModal) {
     orderModal.classList.add("hidden");
+  }
+});
   
 </script>
 </body>
