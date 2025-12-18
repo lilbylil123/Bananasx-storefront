@@ -559,19 +559,26 @@ tr.highlight {
     </div>
   </div>
 
-  <!-- 🛒 Order Modal -->
+ <!-- 🛒 Order Modal -->
 <div id="orderModal" class="modal hidden">
   <div class="modal-content">
     <h2>Place Order</h2>
 
-    <label>
-      Item
-      <select id="orderItem"></select>
-    </label>
+    <div id="orderItems">
+      <div class="order-row">
+        <select class="order-item"></select>
+        <input type="number" class="order-qty" min="1" value="1" />
+      </div>
+    </div>
+
+    <button id="addItemRow">+ Add another item</button>
 
     <label>
-      Quantity
-      <input type="number" id="orderQty" min="1" value="1" />
+      Delivery Required?
+      <select id="orderDelivery">
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+      </select>
     </label>
 
     <label>
@@ -592,6 +599,7 @@ tr.highlight {
     <p id="orderStatus" class="muted"></p>
   </div>
 </div>
+
            
 <script>
   // === Settings ===
