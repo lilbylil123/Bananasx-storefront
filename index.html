@@ -649,42 +649,41 @@ tr.highlight {
   <div class="modal-content">
     <h2>Place Order</h2>
 
-    <!-- ITEMS CONTAINER (REQUIRED) -->
-    <div id="orderItems">
-      <div class="order-row">
-        <label>
-          Item
-          <select class="order-item"></select>
-        </label>
+    <!-- ITEMS CONTAINER -->
+<div id="orderItems">
 
-        <label>
-          Quantity
-          <input
-            type="number"
-            class="order-qty"
-            min="1"
-            value="1"
-          />
-        </label>
-      </div>
-    </div>
+  <!-- Header row (labels shown once) -->
+  <div class="order-header">
+    <span>Item</span>
+    <span>Quantity</span>
+  </div>
 
-    <!-- ADD ITEM BUTTON (REQUIRED ID) -->
-    <button
-      type="button"
-      id="addOrderItem"
-      class="add-item-btn"
-    >
-      + Add another item
-    </button>
+  <!-- First order row -->
+  <div class="order-row">
+    <select class="order-item"></select>
+    <input type="number" class="order-qty" min="1" value="1" />
+  </div>
 
-   <label>
+</div>
+
+<!-- ADD ITEM BUTTON -->
+<button
+  type="button"
+  id="addOrderItem"
+  class="add-item-btn"
+>
+  + Add another item
+</button>
+
+<!-- DELIVERY -->
+<label>
   Delivery Required?
   <select id="deliveryRequired">
     <option value="No">No</option>
     <option value="Yes">Yes</option>
   </select>
 </label>
+
 
 
            
