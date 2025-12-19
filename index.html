@@ -1074,32 +1074,77 @@ addOrderItemBtn?.addEventListener("click", () => {
 });
 
 
-/* ===== SUBMIT ORDER ===== */
+/* ===== SUBMIT ORDER → DISCORD WEBHOOK ===== */
 
-document.getElementById("submitOrder")?.addEventListener("click", () => {
+document.getElementById("submitOrder")?.addEventListener("click", async () => {
   const items = [];
 
   document.querySelectorAll(".order-row").forEach(row => {
     const item = row.querySelector(".order-item")?.value;
-    const qty = row.querySelector(".order-qty")?.value;
+    const qty = Number(row.querySelector(".order-qty")?.value || 0);
 
     if (item && qty > 0) {
-      items.push({ item, quantity: Number(qty) });
+      items.push(`• **${item}** × ${qty}`);
     }
   });
 
-  const order = {
-    items,
-    delivery: document.getElementById("deliveryRequired")?.value || "No",
-    discord: document.getElementById("orderDiscord")?.value.trim() || "",
-    notes: document.getElementById("orderNotes")?.value.trim() || "",
-    timestamp: new Date().toISOString()
+  if (!items.length) {
+    alert("Please add at least one item.");
+    return;
+  }
+
+  const delivery = document.getElementById("deliveryRequired")?.value || "No";
+  const discord = document.getElementById("orderDiscord")?.value?.trim() || "Not provided";
+  const notes = document.getElementById("orderNotes")?.value?.trim() || "—";
+
+  const payload = {
+    embeds: [
+      {
+        title: "🛒 New BananasX Order",
+        color: 0xffcc00,
+        fields: [
+          {
+            name: "Items",
+            value: items.join("\n")
+          },
+          {
+            name: "Delivery Required",
+            value: delivery,
+            inline: true
+          },
+          {
+            name: "Discord Handle",
+            value: discord,
+            inline: true
+          },
+          {
+            name: "Notes",
+            value: notes
+          }
+        ],
+        footer: {
+          text: "BananasX & Co."
+        },
+        timestamp: new Date().toISOString()
+      }
+    ]
   };
 
-  console.log("ORDER PAYLOAD:", order);
+  try {
+    await fetch(DISCORD_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-  alert("Order captured — check console");
+    alert("✅ Order sent to Discord!");
+    orderModal.classList.add("hidden");
+  } catch (err) {
+    console.error("Discord webhook error:", err);
+    alert("❌ Failed to send order. Check console.");
+  }
 });
+
 
 
 
