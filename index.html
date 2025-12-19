@@ -943,12 +943,14 @@ const closeOrderBtn = document.getElementById("closeOrder");
 if (placeOrderBtn) {
   placeOrderBtn.addEventListener("click", () => {
     orderModal.classList.remove("hidden");
+    resetOrderModal(); 
   });
 }
 
 if (closeOrderBtn) {
   closeOrderBtn.addEventListener("click", () => {
     orderModal.classList.add("hidden");
+    orderItemsContainer.innerHTML = ""; // cleanup
   });
 }
 
@@ -993,6 +995,29 @@ function populateOrderSelect(select) {
 placeOrderBtn?.addEventListener("click", () => {
   document.querySelectorAll(".order-item").forEach(populateOrderSelect);
 });
+  function resetOrderModal() {
+  if (!orderItemsContainer) return;
+
+  orderItemsContainer.innerHTML = "";
+
+  // Create ONE clean base row
+  const row = document.createElement("div");
+  row.className = "order-row";
+
+  row.innerHTML = `
+    <label>Item</label>
+    <select class="order-item"></select>
+
+    <label>Quantity</label>
+    <input type="number" class="order-qty" min="1" value="1" />
+  `;
+
+  orderItemsContainer.appendChild(row);
+
+  // Populate dropdown using visible table rows
+  populateOrderSelect(row.querySelector(".order-item"));
+}
+
 
   /* ===== ADD MULTIPLE ORDER ITEMS ===== */
 
@@ -1001,16 +1026,15 @@ const orderItemsContainer = document.getElementById("orderItems");
 
 addOrderItemBtn?.addEventListener("click", () => {
   const firstRow = orderItemsContainer.querySelector(".order-row");
-  const newRow = firstRow.cloneNode(true);
+  if (!firstRow) return;
 
-  // Reset quantity
+  const newRow = firstRow.cloneNode(true);
   newRow.querySelector(".order-qty").value = 1;
 
   orderItemsContainer.appendChild(newRow);
-
-  // Repopulate dropdowns so filters apply
   populateOrderSelect(newRow.querySelector(".order-item"));
 });
+
 
   /* ===== SUBMIT ORDER ===== */
 
