@@ -1066,14 +1066,14 @@ addOrderItemBtn?.addEventListener("click", () => {
 });
 
 
-  /* ===== SUBMIT ORDER ===== */
+/* ===== SUBMIT ORDER ===== */
 
 document.getElementById("submitOrder")?.addEventListener("click", () => {
   const items = [];
 
   document.querySelectorAll(".order-row").forEach(row => {
-    const item = row.querySelector(".order-item").value;
-    const qty = row.querySelector(".order-qty").value;
+    const item = row.querySelector(".order-item")?.value;
+    const qty = row.querySelector(".order-qty")?.value;
 
     if (item && qty > 0) {
       items.push({ item, quantity: Number(qty) });
@@ -1082,16 +1082,15 @@ document.getElementById("submitOrder")?.addEventListener("click", () => {
 
   const order = {
     items,
-    delivery: document.getElementById("orderDelivery").value,
-    discord: document.getElementById("orderDiscord").value.trim(),
-    notes: document.getElementById("orderNotes").value.trim(),
+    delivery: document.getElementById("deliveryRequired")?.value || "No",
+    discord: document.getElementById("orderDiscord")?.value.trim() || "",
+    notes: document.getElementById("orderNotes")?.value.trim() || "",
     timestamp: new Date().toISOString()
   };
 
   console.log("ORDER PAYLOAD:", order);
 
-  // TEMP success feedback
-  alert("Order captured. Check console.");
+  alert("Order captured — check console");
 });
 
 
