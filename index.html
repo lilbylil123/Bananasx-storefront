@@ -516,33 +516,32 @@ tr.highlight {
 #orderItems {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.order-row {
+/* Header row (Item / Qty labels) */
+.order-header {
   display: grid;
-  grid-template-columns: 1fr 90px;
-  gap: 8px 10px;
-  align-items: center;
-}
-
-.order-row label {
+  grid-template-columns: 1fr 110px;
+  gap: 10px;
   font-size: 11px;
   color: #aaa;
+  padding-bottom: 4px;
 }
 
-.order-row label:nth-of-type(1) {
-  grid-column: 1 / 2;
-}
-
-.order-row label:nth-of-type(2) {
-  grid-column: 2 / 3;
+/* Each order row */
+.order-row {
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  gap: 10px;
+  align-items: center;
 }
 
 .order-row select,
 .order-row input {
   width: 100%;
 }
+
 
 </style>
 
