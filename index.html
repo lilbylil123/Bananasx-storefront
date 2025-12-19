@@ -1124,28 +1124,12 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
         title: "🛒 New BananasX Order",
         color: 0xffcc00,
         fields: [
-          {
-            name: "Items",
-            value: items.join("\n")
-          },
-          {
-            name: "Delivery Required",
-            value: delivery,
-            inline: true
-          },
-          {
-            name: "Discord Handle",
-            value: discord,
-            inline: true
-          },
-          {
-            name: "Notes",
-            value: notes
-          }
+          { name: "Items", value: items.join("\n") },
+          { name: "Delivery Required", value: delivery, inline: true },
+          { name: "Discord Handle", value: discord, inline: true },
+          { name: "Notes", value: notes }
         ],
-        footer: {
-          text: "BananasX & Co."
-        },
+        footer: { text: "BananasX & Co." },
         timestamp: new Date().toISOString()
       }
     ]
@@ -1158,11 +1142,24 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
       body: JSON.stringify(payload)
     });
 
-    alert("✅ Order sent to Discord!");
+    alert("Order sent successfully!");
     orderModal.classList.add("hidden");
+
+    // Reset modal
+    document.getElementById("orderItems").innerHTML = `
+      <div class="order-row">
+        <select class="order-item"></select>
+        <input type="number" class="order-qty" min="1" value="1" />
+      </div>
+    `;
+    populateOrderSelect(document.querySelector(".order-item"));
+
+    document.getElementById("deliveryRequired").value = "No";
+    document.getElementById("orderDiscord").value = "";
+    document.getElementById("orderNotes").value = "";
   } catch (err) {
-    console.error("Discord webhook error:", err);
-    alert("❌ Failed to send order. Check console.");
+    console.error("Webhook failed:", err);
+    alert("Failed to send order. Check console.");
   }
 });
 
