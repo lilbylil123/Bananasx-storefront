@@ -532,7 +532,7 @@ tr.highlight {
 /* Each order row */
 .order-row {
   display: grid;
-  grid-template-columns: 1fr 110px;
+  grid-template-columns: 1fr 80px 100px;
   gap: 10px;
   align-items: center;
 }
@@ -659,10 +659,11 @@ tr.highlight {
   </div>
 
   <!-- First order row -->
-  <div class="order-row">
-    <select class="order-item"></select>
-    <input type="number" class="order-qty" min="1" value="1" />
-  </div>
+<div class="order-row">
+  <select class="order-item"></select>
+  <input type="number" class="order-qty" min="1" value="1" />
+  <span class="line-total">$0</span>
+</div>
 
 </div>
 
@@ -701,6 +702,18 @@ tr.highlight {
     placeholder="Extra details, timing, location, etc."
   ></textarea>
 </label>
+    <div
+  id="orderTotalBox"
+  style="
+    text-align: right;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 6px;
+  "
+>
+  Order Total: <span id="orderTotal">$0</span>
+</div>
+
  
 <!-- ACTION BUTTONS -->
 <div class="modal-actions">
@@ -1017,6 +1030,48 @@ document.querySelectorAll(".filter-pill").forEach(pill => {
 document
   .getElementById("search")
   .addEventListener("input", applyAllFilters);
+
+  // === Recalculate Order Totals (uses price map from table) ===
+function recalcOrderTotals() {
+  if (typeof buildPriceMap !== "function") return 0;
+
+  const priceMap = buildPriceMap();
+  let grandTotal = 0;
+
+  document.querySelectorAll(".order-row").forEach(row => {
+    const item = row.querySelector(".order-item")?.value;
+    const qty = Number(row.querySelector(".order-qty")?.value || 0);
+    const lineEl = row.querySelector(".line-total");
+
+    const price = priceMap[item] || 0;
+    const lineTotal = price * qty;
+
+    if (lineEl) {
+      lineEl.textContent = `$${lineTotal.toLocaleString()}`;
+    }
+
+    grandTotal += lineTotal;
+  });
+
+  const totalEl = document.getElementById("orderTotal");
+  if (totalEl) {
+    totalEl.textContent = `$${grandTotal.toLocaleString()}`;
+  }
+
+  return grandTotal;
+}
+
+  // Live update totals when item or quantity changes
+document.addEventListener("input", e => {
+  if (
+    e.target.classList.contains("order-item") ||
+    e.target.classList.contains("order-qty")
+  ) {
+    recalcOrderTotals();
+  }
+});
+
+
 
 
   /* ===== ORDER MODAL LOGIC ===== */
