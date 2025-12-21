@@ -8,7 +8,7 @@ const CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xm990HH7LTwD7X8YDM8oeG35kSGPNv0ZKEohbCdm9oDHzC77_v73RVR8KHWRa5udSKHb9oyqEc4o/pub?gid=613857331&single=true&output=csv"
   );
 
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1451374761958703135/VvmaKD3wJqBIs7Zkge7JM7wgLI6_bTz6GN197T4giUB8UTeHLchzyJZ1g_gxJ4w_Vyd6";
+const DISCORD_WEBHOOK_URL = "DISCORD WEBURL HERE";
 const GOLD = "#ffcc00";
 
 // Cached inventory for order modal (not affected by filters)
