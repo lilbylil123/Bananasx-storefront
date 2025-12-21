@@ -75,7 +75,12 @@ async function load() {
    console.log("CSV HEADERS:", head);   // pulling headers //
 
 
-  const idx = name => head.indexOf(name);
+  const idx = name =>
+  head.findIndex(h =>
+    h.replace(/[\s_]+/g, "").toLowerCase() ===
+    name.replace(/[\s_]+/g, "").toLowerCase()
+  );
+
   const iName = idx("Name"),
         iSize = idx("Size"),
         iType = idx("Type"),
