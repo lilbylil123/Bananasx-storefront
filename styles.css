@@ -195,14 +195,6 @@ tr.highlight {
   justify-content: center;
 }
 
-.filter-label {
-  font-size: 0.7rem;
-  color: #777;
-  letter-spacing: 1px;
-  margin-right: 4px;
-  font-family: 'Orbitron', sans-serif;
-}
-
 .filter-pill {
   background: rgba(15, 18, 25, 0.85);
   border: 1px solid var(--border);
@@ -220,13 +212,6 @@ tr.highlight {
   border-color: var(--accent);
   box-shadow: 0 0 10px rgba(255, 204, 0, 0.25);
 }
-
-.filter-pill.active {
-  background: var(--accent);
-  color: #000;
-  box-shadow: 0 0 14px rgba(255, 204, 0, 0.6);
-}
-
 
 /* === Place Order Button === */
 .order-button-box {
@@ -418,6 +403,10 @@ tr.highlight {
   width: 360px;
   max-width: 90%;
   box-shadow: 0 0 25px rgba(255, 204, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 /* Modal form elements */
@@ -445,18 +434,6 @@ tr.highlight {
   gap: 10px;
   justify-content: flex-end;
   margin-top: 10px;
-}
-  .modal-content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.order-row {
-  display: grid;
-  grid-template-columns: 1fr 80px;
-  gap: 10px;
-  align-items: center;
 }
 
 .order-row select,
