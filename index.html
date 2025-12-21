@@ -1180,6 +1180,8 @@ addOrderItemBtn?.addEventListener("click", () => {
 
 document.getElementById("submitOrder")?.addEventListener("click", async () => {
   const items = [];
+  const orderTotal = recalcOrderTotals();
+
 
   document.querySelectorAll(".order-row").forEach(row => {
     const item = row.querySelector(".order-item")?.value;
@@ -1206,6 +1208,9 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
         color: 0xffcc00,
         fields: [
           { name: "Items", value: items.join("\n") },
+          name: "Order Total",
+          value: `${orderTotal.toLocaleString()} aUEC`,
+          inline: false
           { name: "Delivery Required", value: delivery, inline: true },
           { name: "Discord Handle", value: discord, inline: true },
           { name: "Notes", value: notes }
