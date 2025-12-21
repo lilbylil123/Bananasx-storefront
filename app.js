@@ -225,14 +225,8 @@ function recalcOrderTotals() {
     total += line;
   });
 
-  const totalEl = document.getElementById("orderTotal");
-
-totalEl.classList.remove("animate"); // reset animation
-void totalEl.offsetWidth;            // force reflow 
-totalEl.textContent = `${total.toLocaleString()} aUEC`;
-totalEl.classList.add("animate");
-
-
+  document.getElementById("orderTotal").textContent =
+  `${total.toLocaleString()} aUEC`;
   return total;
 }
 
