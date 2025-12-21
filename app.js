@@ -281,6 +281,16 @@ addOrderItemBtn?.addEventListener("click", () => {
   recalcOrderTotals();
 });
 
+orderItemsContainer?.addEventListener("input", e => {
+  if (
+    e.target.classList.contains("order-qty") ||
+    e.target.classList.contains("order-item")
+  ) {
+    recalcOrderTotals();
+  }
+});
+
+
 
 /* =========================================================
    ORDER ITEM POPULATION
