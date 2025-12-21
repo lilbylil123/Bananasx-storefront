@@ -157,26 +157,29 @@ console.log("SAMPLE ROW", {
     });
   }
 
-  renderTable();
-   // Cache inventory for order modal (do NOT depend on visible rows)
+// Render inventory table first
+renderTable();
+
+// ✅ Build inventory cache AFTER indices exist
 INVENTORY_ITEMS = body
   .map(r => ({
     name: r[iName]?.trim(),
-    sku: r[iSku]?.trim(),
+    sku:  r[iSku]?.trim(),
     stock: Number(r[iStock] || 0)
   }))
   .filter(i => i.name && i.sku && i.stock > 0);
-  makeSortable(body, renderTable);
-  applyAllFilters();
 
-  const ms = Date.now() - t0;
-  document.getElementById("updated").textContent =
+// Enable sorting & filters AFTER table + cache exist
+makeSortable(body, renderTable);
+applyAllFilters();
+
+const ms = Date.now() - t0;
+document.getElementById("updated").textContent =
   `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} • ${ms}ms`;
 
 }
 
 load();
-
 
 /* =========================================================
    FILTERS & TABLE VISUALS
