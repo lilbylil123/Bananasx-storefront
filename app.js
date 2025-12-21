@@ -41,7 +41,6 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/145137476195870313
   const t0 = Date.now();
   const res = await fetch(CSV_URL, { cache: "no-store", mode: "cors" });
   const txt = await res.text();
-      console.log("CSV text preview:", txt.slice(0, 500));
   const rows = parseCSV(txt).filter(r => r.length);
   if (!rows.length) return;
 
@@ -64,7 +63,7 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/145137476195870313
     const tb = document.getElementById("tbody");
 
 // --- Click-to-sort helper ---
-function makeSortable(headers, data, render) {
+function makeSortable(data, render) {
   const thEls = document.querySelectorAll("thead th");
   let sortKey = null, asc = true;
 
@@ -120,8 +119,9 @@ function renderTable() {
 
    // --- Initial render + make headers sortable ---
 renderTable();
-makeSortable(head, body, renderTable);
+makeSortable(body, renderTable);
 
+    
 // ✅ APPLY FILTERS AFTER ROWS EXIST
 applyAllFilters();
 
@@ -160,8 +160,6 @@ window.buildPriceMap = function () {
 
 
   load();
-  // Optional: refresh every 2 minutes
-  // setInterval(load, 120000);
 
 // === Quick Filter State ===
 let quickFilters = {
