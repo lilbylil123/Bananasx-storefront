@@ -326,17 +326,18 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
 
   const total = recalcOrderTotals();
 
-  const payload = {
-    embeds: [{
-      title: "🛒 New BananasX Order",
-      color: 0xffcc00,
-      fields: [
-        { name: "Items", value: items.join("\n") },
-        { name: "Order Total", value: `${total.toLocaleString()} aUEC` }
-      ],
-      timestamp: new Date().toISOString()
-    }]
-  };
+ const payload = {
+  embeds: [{
+    title: "🛒 New BananasX Order",
+    color: 0xffcc00,
+    fields: [
+      { name: "Items", value: items.join("\n") },
+      { name: "Order Total", value: `${total.toLocaleString()} aUEC` },
+      { name: "Discord Handle / Name", value: discord, inline: true }
+    ],
+    timestamp: new Date().toISOString()
+  }]
+};
 
   await fetch(DISCORD_WEBHOOK_URL, {
     method: "POST",
