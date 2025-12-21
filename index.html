@@ -711,7 +711,7 @@ tr.highlight {
     margin-top: 6px;
   "
 >
-  Order Total: <span id="orderTotal">$0</span>
+  Order Total: <span id="orderTotal">0 aUEC</span>
 </div>
 
  
@@ -1055,7 +1055,7 @@ function recalcOrderTotals() {
 
   const totalEl = document.getElementById("orderTotal");
   if (totalEl) {
-    totalEl.textContent = `$${grandTotal.toLocaleString()}`;
+    totalEl.textContent = `${grandTotal.toLocaleString()} aUEC`;
   }
 
   return grandTotal;
