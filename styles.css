@@ -496,7 +496,7 @@ tr.highlight {
 /* Each order row */
 .order-row {
   display: grid;
-  grid-template-columns: 1fr 80px 100px;
+  grid-template-columns: 1fr 72px 120px;
   gap: 10px;
   align-items: center;
 }
@@ -505,4 +505,45 @@ tr.highlight {
 .order-row input {
   width: 100%;
 }
+
+.line-total {
+  text-align: right;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+#orderTotal {
+  display: block;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  text-align: right;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Remove number input arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield;
+}
+
+.order-qty {
+  background: rgba(15, 18, 25, 0.85);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  border-radius: 6px;
+  padding: 6px;
+  text-align: center;
+  font-weight: 600;
+}
+
 
