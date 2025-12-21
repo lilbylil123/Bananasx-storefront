@@ -392,16 +392,20 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
 
   try {
     for (const item of items) {
-      const res = await fetch(API_URL, {
+      await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sku: item.sku,
-          qty: item.qty,
-          discord,
-          notes
-        })
-      });
+        mode: "no-cors", // ⬅️ REQUIRED FOR GOOGLE APPS SCRIPT
+        headers: {
+      "Content-Type": "application/json"
+  },
+         body: JSON.stringify({
+         sku: item.sku,
+         qty: item.qty,
+         discord,
+         notes
+  })
+});
+;
 
       const result = await res.json();
 
