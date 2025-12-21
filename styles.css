@@ -554,7 +554,7 @@ input[type="number"] {
     box-shadow: none;
   }
   40% {
-    transform: scale(1.03);
+    transform: scale(1.015);
     color: #ffe680;
     box-shadow: 0 0 12px rgba(255, 204, 0, 0.45);
   }
