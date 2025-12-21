@@ -849,6 +849,32 @@ applyAllFilters();
       d.toLocaleString([], {hour:'2-digit', minute:'2-digit'}) + " • " + ms + "ms";
   }
 
+  // === Build price map from rendered table (AFTER renderTable) ===
+window.buildPriceMap = function () {
+  const map = {};
+
+  document.querySelectorAll("#tbody tr").forEach(row => {
+    const name = row.children[0]?.textContent.trim();
+    const priceText = row.children[5]?.textContent.trim();
+
+    if (!name || !priceText) return;
+
+    let price =
+      priceText.includes("M")
+        ? parseFloat(priceText) * 1_000_000
+        : priceText.includes("K")
+        ? parseFloat(priceText) * 1_000
+        : parseFloat(priceText);
+
+    if (Number.isFinite(price)) {
+      map[name] = price;
+    }
+  });
+
+  return map;
+};
+
+
   load();
   // Optional: refresh every 2 minutes
   // setInterval(load, 120000);
