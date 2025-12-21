@@ -14,6 +14,13 @@ const GOLD = "#ffcc00";
 // Cached inventory for order modal (not affected by filters)
 let INVENTORY_ITEMS = [];
 
+let PRICE_MAP = {};
+
+function getPriceBySKU(sku) {
+  return PRICE_MAP[sku] || 0;
+}
+
+
 
 /* =========================================================
    UTILITY FUNCTIONS
@@ -162,6 +169,16 @@ INVENTORY_ITEMS = body
   }))
   .filter(i => i.name && i.sku && i.stock > 0);
 
+   PRICE_MAP = {};
+body.forEach(r => {
+  const sku = r[iSku]?.trim();
+  const price = Number(r[iPrice] || 0);
+  if (sku && price > 0) {
+    PRICE_MAP[sku] = price;
+  }
+});
+
+
 // Enable sorting & filters AFTER table + cache exist
 makeSortable(body, renderTable);
 applyAllFilters();
@@ -218,41 +235,40 @@ function applyAllFilters() {
    PRICING & TOTAL CALCULATIONS
 ========================================================= */
 
-function buildPriceMap() {
-  const map = {};
-  document.querySelectorAll("#tbody tr").forEach(row => {
-    const sku = row.children[6]?.textContent.trim();   // SKU column
-    const priceText = row.children[5]?.textContent.trim();
-    if (!sku || !priceText) return;
-
-    const price =
-      priceText.includes("M") ? parseFloat(priceText) * 1_000_000 :
-      priceText.includes("K") ? parseFloat(priceText) * 1_000 :
-      parseFloat(priceText);
-
-    if (Number.isFinite(price)) map[sku] = price;
-  });
-  return map;
-}
-
 function recalcOrderTotals() {
-  const prices = buildPriceMap();
   let total = 0;
 
   document.querySelectorAll(".order-row").forEach(row => {
-    const item = row.querySelector(".order-item")?.value;
-    const qty = Number(row.querySelector(".order-qty")?.value || 0);
+    const sku = row.querySelector(".order-item")?.value;
+    const qtyInput = row.querySelector(".order-qty");
+    const qty = Number(qtyInput?.value || 0);
+    const price = getPriceBySKU(sku);
     const lineEl = row.querySelector(".line-total");
 
-    const line = (prices[item] || 0) * qty;
-    if (lineEl) lineEl.textContent = `${line.toLocaleString()} aUEC`;
-    total += line;
+    const maxStock =
+      INVENTORY_ITEMS.find(i => i.sku === sku)?.stock ?? Infinity;
+
+    // Enforce stock limit
+    if (qty > maxStock) {
+      qtyInput.value = maxStock;
+    }
+
+    const lineTotal = price * qtyInput.value;
+    total += lineTotal;
+
+    if (lineEl) {
+      lineEl.textContent = lineTotal
+        ? `${lineTotal.toLocaleString()} aUEC`
+        : "0 aUEC";
+    }
   });
 
   document.getElementById("orderTotal").textContent =
-  `${total.toLocaleString()} aUEC`;
+    `${total.toLocaleString()} aUEC`;
+
   return total;
 }
+
 
 
 /* =========================================================
@@ -334,12 +350,18 @@ function populateOrderSelect(select) {
   select.innerHTML = `<option value="">Select item…</option>`;
 
   sorted.forEach(item => {
-    const opt = document.createElement("option");
-    opt.value = item.sku;
-    opt.textContent = `${item.name} (Stock: ${item.stock})`;
-    opt.dataset.stock = item.stock;
-    select.appendChild(opt);
-  });
+  const opt = document.createElement("option");
+  opt.value = item.sku;
+  opt.textContent = `${item.name} (Stock: ${item.stock})`;
+  opt.dataset.stock = item.stock;
+
+  if (item.stock <= 0) {
+    opt.disabled = true;
+    opt.textContent += " — OUT OF STOCK";
+  }
+
+  select.appendChild(opt);
+});
 }
 
 
