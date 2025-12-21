@@ -411,23 +411,13 @@ placeOrderBtn?.addEventListener("click", () => {
 
   orderItemsContainer.innerHTML = "";
 
-  // Create ONE clean base row
-  const row = document.createElement("div");
-  row.className = "order-row";
-
-  row.innerHTML = `
-    <label>Item</label>
-    <select class="order-item"></select>
-
-    <label>Quantity</label>
-    <input type="number" class="order-qty" min="1" value="1" />
-  `;
-
+  const row = createOrderRow();
   orderItemsContainer.appendChild(row);
 
-  // Populate dropdown using visible table rows
   populateOrderSelect(row.querySelector(".order-item"));
+  recalcOrderTotals();
 }
+
 
 
   /* ===== ADD MULTIPLE ORDER ITEMS ===== */
@@ -500,14 +490,7 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
     orderModal.classList.add("hidden");
 
     // Reset modal
-    document.getElementById("orderItems").innerHTML = `
-      <div class="order-row">
-        <select class="order-item"></select>
-        <input type="number" class="order-qty" min="1" value="1" />
-      </div>
-    `;
-    populateOrderSelect(document.querySelector(".order-item"));
-
+    resetOrderModal();
     document.getElementById("deliveryRequired").value = "No";
     document.getElementById("orderDiscord").value = "";
     document.getElementById("orderNotes").value = "";
