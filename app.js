@@ -11,6 +11,9 @@ const CSV_URL =
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1451374761958703135/VvmaKD3wJqBIs7Zkge7JM7wgLI6_bTz6GN197T4giUB8UTeHLchzyJZ1g_gxJ4w_Vyd6";
 const GOLD = "#ffcc00";
 
+// Cached inventory for order modal (not affected by filters)
+let INVENTORY_ITEMS = [];
+
 
 /* =========================================================
    UTILITY FUNCTIONS
@@ -139,6 +142,14 @@ async function load() {
   }
 
   renderTable();
+   // Cache inventory for order modal (do NOT depend on visible rows)
+INVENTORY_ITEMS = body
+  .map(r => ({
+    name: r[iName]?.trim(),
+    sku: r[iSku]?.trim(),
+    stock: Number(r[iStock] || 0)
+  }))
+  .filter(i => i.name && i.sku && i.stock > 0);
   makeSortable(body, renderTable);
   applyAllFilters();
 
@@ -146,10 +157,6 @@ async function load() {
   document.getElementById("updated").textContent =
   `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} • ${ms}ms`;
 
-// Refresh order modal dropdowns once inventory is loaded
-document.querySelectorAll(".order-item").forEach(select => {
-  populateOrderSelect(select);
-});
 }
 
 load();
@@ -299,39 +306,26 @@ orderItemsContainer?.addEventListener("input", e => {
 /* =========================================================
    ORDER ITEM POPULATION
 ========================================================= */
-
-function getVisibleItems() {
-  return [...document.querySelectorAll("#tbody tr")]
-    .filter(r => r.style.display !== "none")
-    .map(r => ({
-      name: r.children[0]?.textContent.trim(), // Name
-      sku:  r.children[6]?.textContent.trim()  // SKU column
-    }))
-    .filter(i => i.name && i.sku);
-}
-
 function populateOrderSelect(select) {
   select.innerHTML = "";
 
-  const items = getVisibleItems();
-
-  // Safety: inventory not ready yet
-  if (!items.length) {
+  if (!INVENTORY_ITEMS.length) {
     const opt = document.createElement("option");
-    opt.textContent = "Loading inventory…";
+    opt.textContent = "Inventory unavailable";
     opt.disabled = true;
     opt.selected = true;
     select.appendChild(opt);
     return;
   }
 
-  items.forEach(item => {
+  INVENTORY_ITEMS.forEach(item => {
     const opt = document.createElement("option");
-    opt.value = item.sku;        // SKU for backend
-    opt.textContent = item.name; // Name for user
+    opt.value = item.sku;        // backend-safe
+    opt.textContent = item.name; // user-friendly
     select.appendChild(opt);
   });
 }
+
 
 
 /* =========================================================
