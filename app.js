@@ -371,56 +371,49 @@ function populateOrderSelect(select) {
 ========================================================= */
 
 document.getElementById("submitOrder")?.addEventListener("click", async () => {
-  const items = [];
-
-  document.querySelectorAll(".order-row").forEach(row => {
+  try {
+    const row = document.querySelector(".order-row");
     const sku = row.querySelector(".order-item")?.value;
     const qty = Number(row.querySelector(".order-qty")?.value || 0);
+    const discord = document.getElementById("orderDiscord")?.value || "";
+    const notes = document.getElementById("orderNotes")?.value || "";
 
-    if (sku && qty > 0) {
-      items.push({ sku, qty });
+    if (!sku || qty <= 0) {
+      alert("Please select an item and quantity.");
+      return;
     }
-  });
 
-  if (!items.length) {
-    alert("Please add at least one item.");
-    return;
-  }
+    const payload = {
+      sku,
+      qty,
+      discord,
+      notes
+    };
 
-  const discord = document.getElementById("orderDiscord")?.value?.trim() || "";
-  const notes = document.getElementById("orderNotes")?.value?.trim() || "";
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain" // 🔑 NO PREFLIGHT
+      },
+      body: JSON.stringify(payload)
+    });
 
-  try {
-    for (const item of items) {
-  await fetch(API_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "text/plain"
-  },
-  body: JSON.stringify({
-    sku,
-    qty,
-    discord,
-    notes
-  })
-});
+    const result = await res.json();
 
+    if (!result.success) {
+      alert(result.error || "Order failed");
+      return;
+    }
 
-  const result = await res.json();
-
-  if (!result.success) {
-    alert(result.error || "Order failed.");
-    return;
-  }
-}
-
-
-    alert("✅ Order submitted successfully!");
-    location.reload();
+    alert(
+      result.dryRun
+        ? "🧪 Test order submitted (no stock changed)"
+        : "✅ Order submitted successfully"
+    );
 
   } catch (err) {
     console.error(err);
-    alert("❌ Network error submitting order.");
+    alert("Network error submitting order.");
   }
 });
 
