@@ -392,18 +392,19 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
 
   try {
     for (const item of items) {
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      sku: item.sku,
-      qty: item.qty,
-      discord,
-      notes
-    })
-  });
+  await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "text/plain"
+  },
+  body: JSON.stringify({
+    sku,
+    qty,
+    discord,
+    notes
+  })
+});
+
 
   const result = await res.json();
 
