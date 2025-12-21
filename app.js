@@ -72,13 +72,6 @@ async function load() {
   const head = rows[0].map(s => s.trim());
   const body = rows.slice(1);
 
-   console.log("IDX", { iName, iStock, iSku });  // delete after fix //
-console.log("SAMPLE ROW", {
-  name: body[0]?.[iName],
-  stock: body[0]?.[iStock],
-  sku: body[0]?.[iSku]
-});
-
 
    console.log("CSV HEADERS:", head);   // pulling headers //
 
