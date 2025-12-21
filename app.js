@@ -383,26 +383,21 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
       return;
     }
 
-    const payload = {
-      sku,
-      qty,
-      discord,
-      notes
-    };
+    // DEBUG: confirm what we're sending
+    console.log("SUBMIT SKU:", sku);
 
-   const params = new URLSearchParams({
-  sku,
-  qty,
-  discord,
-  notes
-});
+    const params = new URLSearchParams({ sku, qty, discord, notes });
+    const res = await fetch(`${API_URL}?${params.toString()}`);
+    const result = await res.json();
 
-const res = await fetch(`${API_URL}?${params.toString()}`);
-const result = await res.json();
+    if (!result.success) {
+      alert(result.error || "Order failed");
+      return;
+    }
 
-
-   alert("🧪 Order submitted (test mode)");
-        : "✅ Order submitted successfully"
+    alert(result.dryRun
+      ? "🧪 Test order submitted (no stock changed)"
+      : "✅ Order submitted successfully"
     );
 
   } catch (err) {
@@ -410,5 +405,3 @@ const result = await res.json();
     alert("Network error submitting order.");
   }
 });
-
-
