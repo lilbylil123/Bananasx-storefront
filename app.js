@@ -319,21 +319,25 @@ orderItemsContainer?.addEventListener("input", e => {
    ORDER ITEM POPULATION
 ========================================================= */
 function populateOrderSelect(select) {
-  select.innerHTML = "";
-
-  if (!INVENTORY_ITEMS.length) {
-    const opt = document.createElement("option");
-    opt.textContent = "Inventory unavailable";
-    opt.disabled = true;
-    opt.selected = true;
-    select.appendChild(opt);
+  if (!INVENTORY_ITEMS || !INVENTORY_ITEMS.length) {
+    select.innerHTML = `<option value="">Inventory unavailable</option>`;
     return;
   }
 
-  INVENTORY_ITEMS.forEach(item => {
+  const sorted = [...INVENTORY_ITEMS].sort((a, b) => {
+    const sizeA = Number(a.sku.split("-")[0]) || 0;
+    const sizeB = Number(b.sku.split("-")[0]) || 0;
+    if (sizeA !== sizeB) return sizeA - sizeB;
+    return a.name.localeCompare(b.name);
+  });
+
+  select.innerHTML = `<option value="">Select item…</option>`;
+
+  sorted.forEach(item => {
     const opt = document.createElement("option");
-    opt.value = item.sku;        // backend-safe
-    opt.textContent = item.name; // user-friendly
+    opt.value = item.sku;
+    opt.textContent = `${item.name} (Stock: ${item.stock})`;
+    opt.dataset.stock = item.stock;
     select.appendChild(opt);
   });
 }
