@@ -197,16 +197,16 @@ function applyAllFilters() {
 function buildPriceMap() {
   const map = {};
   document.querySelectorAll("#tbody tr").forEach(row => {
-    const name = row.children[0]?.textContent.trim();
+    const sku = row.children[6]?.textContent.trim();   // SKU column
     const priceText = row.children[5]?.textContent.trim();
-    if (!name || !priceText) return;
+    if (!sku || !priceText) return;
 
     const price =
       priceText.includes("M") ? parseFloat(priceText) * 1_000_000 :
       priceText.includes("K") ? parseFloat(priceText) * 1_000 :
       parseFloat(priceText);
 
-    if (Number.isFinite(price)) map[name] = price;
+    if (Number.isFinite(price)) map[sku] = price;
   });
   return map;
 }
