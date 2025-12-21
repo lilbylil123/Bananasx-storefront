@@ -134,7 +134,7 @@ applyAllFilters();
   }
 
   // === Build price map from rendered table (AFTER renderTable) ===
-window.buildPriceMap = function () {
+function buildPriceMap() {
   const map = {};
 
   document.querySelectorAll("#tbody tr").forEach(row => {
