@@ -298,15 +298,19 @@ orderItemsContainer?.addEventListener("input", e => {
 function getVisibleItems() {
   return [...document.querySelectorAll("#tbody tr")]
     .filter(r => r.style.display !== "none")
-    .map(r => r.children[0]?.textContent.trim())
-    .filter(Boolean);
+    .map(r => ({
+      name: r.children[0]?.textContent.trim(), // Name
+      sku:  r.children[6]?.textContent.trim()  // SKU column
+    }))
+    .filter(i => i.name && i.sku);
 }
 
 function populateOrderSelect(select) {
   select.innerHTML = "";
   getVisibleItems().forEach(item => {
     const opt = document.createElement("option");
-    opt.value = opt.textContent = item;
+    opt.value = item.sku;           // 🔑 backend identifier
+    opt.textContent = item.name;    // 👀 user-friendly label
     select.appendChild(opt);
   });
 }
