@@ -548,9 +548,3 @@ input[type="number"] {
   text-align: center;
   font-weight: 600;
 }
-
-#orderTotal.animate {
-  animation: totalPulse 280ms ease-out;
-}
-
-
