@@ -8,7 +8,7 @@ const CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xm990HH7LTwD7X8YDM8oeG35kSGPNv0ZKEohbCdm9oDHzC77_v73RVR8KHWRa5udSKHb9oyqEc4o/pub?gid=613857331&single=true&output=csv"
   );
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyDwncekpx8YQytCbVy6gbmiojB7kRliNN71LR25jD-BtZztyEgwC984vjz3b3AtG86TQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxLS5O2tw_9x2SAZXTYYonVfc8kiSmqgVEAw4jI2iVfGuATTZ6QhZD3judtu3c_8RY59Q/exec";
 const GOLD = "#ffcc00";
 
 // Cached inventory for order modal (not affected by filters)
@@ -390,14 +390,16 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
       notes
     };
 
-    await fetch(API_URL, {
-      method: "POST",
-      mode: "no-cors",           // 🔑 THIS is the missing piece
-      headers: {
-    "Content-Type": "text/plain"
-  },
-  body: JSON.stringify(payload)
+   const params = new URLSearchParams({
+  sku,
+  qty,
+  discord,
+  notes
 });
+
+const res = await fetch(`${API_URL}?${params.toString()}`);
+const result = await res.json();
+
 
    alert("🧪 Order submitted (test mode)");
         : "✅ Order submitted successfully"
