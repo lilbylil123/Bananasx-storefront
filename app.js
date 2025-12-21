@@ -8,7 +8,7 @@ const CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xm990HH7LTwD7X8YDM8oeG35kSGPNv0ZKEohbCdm9oDHzC77_v73RVR8KHWRa5udSKHb9oyqEc4o/pub?gid=613857331&single=true&output=csv"
   );
 
-const DISCORD_WEBHOOK_URL = "DISCORD WEBURL HERE";
+const API_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
 const GOLD = "#ffcc00";
 
 // Cached inventory for order modal (not affected by filters)
@@ -372,35 +372,52 @@ function populateOrderSelect(select) {
 
 document.getElementById("submitOrder")?.addEventListener("click", async () => {
   const items = [];
+
   document.querySelectorAll(".order-row").forEach(row => {
-    const item = row.querySelector(".order-item")?.value;
+    const sku = row.querySelector(".order-item")?.value;
     const qty = Number(row.querySelector(".order-qty")?.value || 0);
-    if (item && qty > 0) items.push(`• **${item}** × ${qty}`);
+
+    if (sku && qty > 0) {
+      items.push({ sku, qty });
+    }
   });
 
-  const total = recalcOrderTotals();
+  if (!items.length) {
+    alert("Please add at least one item.");
+    return;
+  }
 
- const payload = {
-  embeds: [{
-    title: "🛒 New BananasX Order",
-    color: 0xffcc00,
-    fields: [
-      { name: "Items", value: items.join("\n") },
-      { name: "Order Total", value: `${total.toLocaleString()} aUEC` },
-      { name: "Discord Handle / Name", value: discord, inline: true }
-    ],
-    timestamp: new Date().toISOString()
-  }]
-};
+  const discord = document.getElementById("orderDiscord")?.value?.trim() || "";
+  const notes = document.getElementById("orderNotes")?.value?.trim() || "";
 
-  await fetch(DISCORD_WEBHOOK_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+  try {
+    for (const item of items) {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sku: item.sku,
+          qty: item.qty,
+          discord,
+          notes
+        })
+      });
 
-  alert("Order sent successfully!");
-  orderModal.classList.add("hidden");
-  resetOrderModal();
+      const result = await res.json();
+
+      if (!result.success) {
+        alert(result.error || "Order failed.");
+        return;
+      }
+    }
+
+    alert("✅ Order submitted successfully!");
+    location.reload();
+
+  } catch (err) {
+    console.error(err);
+    alert("❌ Network error submitting order.");
+  }
 });
+
 
