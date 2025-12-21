@@ -392,28 +392,27 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
 
   try {
     for (const item of items) {
-      await fetch(API_URL, {
-        method: "POST",
-        mode: "no-cors", // ⬅️ REQUIRED FOR GOOGLE APPS SCRIPT
-        headers: {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {
       "Content-Type": "application/json"
-  },
-         body: JSON.stringify({
-         sku: item.sku,
-         qty: item.qty,
-         discord,
-         notes
-  })
-});
-;
+    },
+    body: JSON.stringify({
+      sku: item.sku,
+      qty: item.qty,
+      discord,
+      notes
+    })
+  });
 
-      const result = await res.json();
+  const result = await res.json();
 
-      if (!result.success) {
-        alert(result.error || "Order failed.");
-        return;
-      }
-    }
+  if (!result.success) {
+    alert(result.error || "Order failed.");
+    return;
+  }
+}
+
 
     alert("✅ Order submitted successfully!");
     location.reload();
