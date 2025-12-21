@@ -225,8 +225,13 @@ function recalcOrderTotals() {
     total += line;
   });
 
-  document.getElementById("orderTotal").textContent =
-    `${total.toLocaleString()} aUEC`;
+  const totalEl = document.getElementById("orderTotal");
+
+totalEl.classList.remove("animate"); // reset animation
+void totalEl.offsetWidth;            // force reflow 
+totalEl.textContent = `${total.toLocaleString()} aUEC`;
+totalEl.classList.add("animate");
+
 
   return total;
 }
