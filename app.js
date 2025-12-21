@@ -144,7 +144,12 @@ async function load() {
 
   const ms = Date.now() - t0;
   document.getElementById("updated").textContent =
-    `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} • ${ms}ms`;
+  `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} • ${ms}ms`;
+
+// Refresh order modal dropdowns once inventory is loaded
+document.querySelectorAll(".order-item").forEach(select => {
+  populateOrderSelect(select);
+});
 }
 
 load();
@@ -307,10 +312,23 @@ function getVisibleItems() {
 
 function populateOrderSelect(select) {
   select.innerHTML = "";
-  getVisibleItems().forEach(item => {
+
+  const items = getVisibleItems();
+
+  // Safety: inventory not ready yet
+  if (!items.length) {
     const opt = document.createElement("option");
-    opt.value = item.sku;           // 🔑 backend identifier
-    opt.textContent = item.name;    // 👀 user-friendly label
+    opt.textContent = "Loading inventory…";
+    opt.disabled = true;
+    opt.selected = true;
+    select.appendChild(opt);
+    return;
+  }
+
+  items.forEach(item => {
+    const opt = document.createElement("option");
+    opt.value = item.sku;        // SKU for backend
+    opt.textContent = item.name; // Name for user
     select.appendChild(opt);
   });
 }
