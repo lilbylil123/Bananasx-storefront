@@ -72,6 +72,9 @@ async function load() {
   const head = rows[0].map(s => s.trim());
   const body = rows.slice(1);
 
+   console.log("CSV HEADERS:", head);   // pulling headers //
+
+
   const idx = name => head.indexOf(name);
   const iName = idx("Name"),
         iSize = idx("Size"),
