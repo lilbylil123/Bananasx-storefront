@@ -1180,22 +1180,16 @@ addOrderItemBtn?.addEventListener("click", () => {
 
 document.getElementById("submitOrder")?.addEventListener("click", async () => {
   const items = [];
-  const orderTotal = recalcOrderTotals();
-
 
   document.querySelectorAll(".order-row").forEach(row => {
     const item = row.querySelector(".order-item")?.value;
     const qty = Number(row.querySelector(".order-qty")?.value || 0);
-
     if (item && qty > 0) {
       items.push(`• **${item}** × ${qty}`);
     }
   });
 
-  if (!items.length) {
-    alert("Please add at least one item.");
-    return;
-  }
+  const orderTotal = recalcOrderTotals(); // ✅ REQUIRED
 
   const delivery = document.getElementById("deliveryRequired")?.value || "No";
   const discord = document.getElementById("orderDiscord")?.value?.trim() || "Not provided";
@@ -1208,9 +1202,11 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
         color: 0xffcc00,
         fields: [
           { name: "Items", value: items.join("\n") },
-          name: "Order Total",
-          value: `${orderTotal.toLocaleString()} aUEC`,
-          inline: false
+          {
+            name: "Order Total",
+            value: `${orderTotal.toLocaleString()} aUEC`,
+            inline: false
+          },
           { name: "Delivery Required", value: delivery, inline: true },
           { name: "Discord Handle", value: discord, inline: true },
           { name: "Notes", value: notes }
@@ -1220,6 +1216,7 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
       }
     ]
   };
+
 
   try {
     await fetch(DISCORD_WEBHOOK_URL, {
