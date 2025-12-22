@@ -237,6 +237,33 @@ function applyAllFilters() {
   applyZebraStriping();
 }
 
+function applyAllFilters() {
+  ...
+}
+
+/* ================= FILTER BUTTON HANDLERS ================= */
+
+document.querySelectorAll("[data-filter]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const group = btn.dataset.filter; // "size" or "grade"
+    const value = btn.dataset.value;  // selected value
+
+    // Update active filter state
+    quickFilters[group] = value;
+
+    // Toggle visual active class
+    document
+      .querySelectorAll(`[data-filter="${group}"]`)
+      .forEach(b => b.classList.remove("active"));
+
+    btn.classList.add("active");
+
+    // Re-run filters
+    applyAllFilters();
+  });
+});
+
+
 
 /* =========================================================
    PRICING & TOTAL CALCULATIONS
