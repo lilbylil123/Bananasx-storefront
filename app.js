@@ -396,9 +396,10 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
     const res = await fetch(API_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
-      },
+  "Content-Type": "text/plain"
+   },
       body: JSON.stringify(payload)
+
     });
 
     const result = await res.json();
