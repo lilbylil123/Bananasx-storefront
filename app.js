@@ -352,8 +352,9 @@ function populateOrderSelect(select) {
   sorted.forEach(item => {
   const opt = document.createElement("option");
   opt.value = item.sku;
-  opt.textContent = `${item.name} (Stock: ${item.stock})`;
+  opt.textContent = item.name;
   opt.dataset.stock = item.stock;
+;
 
   if (item.stock <= 0) {
     opt.disabled = true;
