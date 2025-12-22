@@ -433,7 +433,7 @@ document.getElementById("submitOrder")?.addEventListener("click", () => {
 });
 
 
-    alert("✅ Order sent to Discord.\nInventory is handled manually.");
+    alert("✅ Order sent to Discord.\nPlease reach out to Kapitin via Discord for any questions.");
 
   } catch (err) {
     console.error(err);
