@@ -367,47 +367,52 @@ function populateOrderSelect(select) {
 
 
 /* =========================================================
-   DISCORD ORDER SUBMISSION
+   ORDER SUBMISSION (APPS SCRIPT → DISCORD ONLY)
 ========================================================= */
 
 document.getElementById("submitOrder")?.addEventListener("click", async () => {
   try {
     const row = document.querySelector(".order-row");
-    const sku = row?.querySelector(".order-item")?.value;
+
+    const name = row?.querySelector(".order-item")?.value;
     const qty = Number(row?.querySelector(".order-qty")?.value || 0);
+
     const discord = document.getElementById("orderDiscord")?.value || "";
     const notes = document.getElementById("orderNotes")?.value || "";
 
-    if (!sku || qty <= 0) {
+    if (!name || qty <= 0) {
       alert("Please select an item and quantity.");
       return;
     }
 
-   
+    const payload = {
+      items: [
+        { name, qty }
+      ],
+      discord,
+      notes
+    };
+
     const res = await fetch(API_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "text/plain"
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify({ sku, qty, discord, notes })
+      body: JSON.stringify(payload)
     });
 
     const result = await res.json();
 
-    
     if (!result.success) {
       alert(result.error || "Order failed");
       return;
     }
 
-    alert(
-      result.dryRun
-        ? "🧪 Test order submitted (no stock changed)"
-        : "✅ Order submitted successfully"
-    );
+    alert("✅ Order sent to Discord. Inventory is handled manually.");
 
   } catch (err) {
     console.error(err);
     alert("Network error submitting order.");
   }
 });
+
