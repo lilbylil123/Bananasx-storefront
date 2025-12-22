@@ -188,8 +188,6 @@ const ms = Date.now() - t0;
 document.getElementById("updated").textContent =
   `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} • ${ms}ms`;
 
-}
-
 load();
 
 /* =========================================================
