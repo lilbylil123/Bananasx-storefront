@@ -380,7 +380,7 @@ document.getElementById("submitOrder")?.addEventListener("click", () => {
     const discord = document.getElementById("orderDiscord")?.value || "";
     const notes = document.getElementById("orderNotes")?.value || "";
 
-    if (!sku || qty <= 0) {
+    if (!name || qty <= 0) {
       alert("Please select an item and quantity.");
       return;
     }
