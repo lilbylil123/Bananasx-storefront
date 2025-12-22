@@ -384,24 +384,31 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
     }
 
     // DEBUG: confirm what we're sending
-    console.log("SUBMIT SKU:", sku);
+console.log("SUBMIT SKU:", sku);
 
-    const params = new URLSearchParams({ sku, qty, discord, notes });
-    const res = await fetch(`${API_URL}?${params.toString()}`);
-    const result = await res.json();
-
-    if (!result.success) {
-      alert(result.error || "Order failed");
-      return;
-    }
-
-    alert(result.dryRun
-      ? "🧪 Test order submitted (no stock changed)"
-      : "✅ Order submitted successfully"
-    );
-
-  } catch (err) {
-    console.error(err);
-    alert("Network error submitting order.");
-  }
+const res = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "text/plain" // 🔑 prevents CORS preflight
+  },
+  body: JSON.stringify({
+    sku,
+    qty,
+    discord,
+    notes
+  })
 });
+
+const result = await res.json();
+
+if (!result.success) {
+  alert(result.error || "Order failed");
+  return;
+}
+
+alert(
+  result.dryRun
+    ? "🧪 Test order submitted (no stock changed)"
+    : "✅ Order submitted successfully"
+);
+
