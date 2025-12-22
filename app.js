@@ -395,7 +395,7 @@ document.getElementById("submitOrder")?.addEventListener("click", () => {
     });
 
     // set to always set to success app script workaround
-    alert("✅ Order sent to Discord.\nInventory is handled manually.");
+    alert("✅ Order sent to Discord. Please reach out to Kapitin to confirm.");
 
   } catch (err) {
     console.error(err);
