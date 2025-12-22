@@ -8,7 +8,7 @@ const CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xm990HH7LTwD7X8YDM8oeG35kSGPNv0ZKEohbCdm9oDHzC77_v73RVR8KHWRa5udSKHb9oyqEc4o/pub?gid=613857331&single=true&output=csv"
   );
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzDSqXY8KkCFiw6wecQMUzScZr08OmU-Nl8OygzRWAvUUT8nJAjF9h2Q13J7KQEVwLM1w/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbx8ua3aX1IykwbWWo_Nc1iecsy6CKaelbT2T-Dgcul--u5KVzu4-wKVTCplaHGqZJ9liA/exec";
 const GOLD = "#ffcc00";
 
 // Cached inventory for order modal (not affected by filters)
