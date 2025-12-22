@@ -373,8 +373,8 @@ function populateOrderSelect(select) {
 document.getElementById("submitOrder")?.addEventListener("click", async () => {
   try {
     const row = document.querySelector(".order-row");
-    const sku = row.querySelector(".order-item")?.value;
-    const qty = Number(row.querySelector(".order-qty")?.value || 0);
+    const sku = row?.querySelector(".order-item")?.value;
+    const qty = Number(row?.querySelector(".order-qty")?.value || 0);
     const discord = document.getElementById("orderDiscord")?.value || "";
     const notes = document.getElementById("orderNotes")?.value || "";
 
@@ -383,32 +383,31 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
       return;
     }
 
-    // DEBUG: confirm what we're sending
-console.log("SUBMIT SKU:", sku);
+   
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: JSON.stringify({ sku, qty, discord, notes })
+    });
 
-const res = await fetch(API_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "text/plain" // 🔑 prevents CORS preflight
-  },
-  body: JSON.stringify({
-    sku,
-    qty,
-    discord,
-    notes
-  })
+    const result = await res.json();
+
+    
+    if (!result.success) {
+      alert(result.error || "Order failed");
+      return;
+    }
+
+    alert(
+      result.dryRun
+        ? "🧪 Test order submitted (no stock changed)"
+        : "✅ Order submitted successfully"
+    );
+
+  } catch (err) {
+    console.error(err);
+    alert("Network error submitting order.");
+  }
 });
-
-const result = await res.json();
-
-if (!result.success) {
-  alert(result.error || "Order failed");
-  return;
-}
-
-alert(
-  result.dryRun
-    ? "🧪 Test order submitted (no stock changed)"
-    : "✅ Order submitted successfully"
-);
-  });
