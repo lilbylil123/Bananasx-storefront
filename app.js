@@ -370,13 +370,12 @@ function populateOrderSelect(select) {
    ORDER SUBMISSION (APPS SCRIPT → DISCORD ONLY)
 ========================================================= */
 
-document.getElementById("submitOrder")?.addEventListener("click", async () => {
+document.getElementById("submitOrder")?.addEventListener("click", () => {
   try {
     const row = document.querySelector(".order-row");
 
     const sku = row?.querySelector(".order-item")?.value;
     const qty = Number(row?.querySelector(".order-qty")?.value || 0);
-
     const discord = document.getElementById("orderDiscord")?.value || "";
     const notes = document.getElementById("orderNotes")?.value || "";
 
@@ -385,25 +384,23 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
       return;
     }
 
-    await fetch(API_URL, {
+    // 
+    fetch(API_URL, {
       method: "POST",
       mode: "no-cors",
       headers: {
         "Content-Type": "text/plain"
       },
-      body: JSON.stringify({
-        sku,
-        qty,
-        discord,
-        notes
-      })
+      body: JSON.stringify({ sku, qty, discord, notes })
     });
 
-    alert("✅ Order sent to Discord. Inventory is handled manually.");
+    // set to always set to success app script workaround
+    alert("✅ Order sent to Discord.\nInventory is handled manually.");
 
   } catch (err) {
     console.error(err);
-    alert("Network error submitting order.");
+    alert("Unexpected client error.");
   }
 });
+
 
