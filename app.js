@@ -181,6 +181,7 @@ body.forEach(r => {
 
 // Enable sorting & filters AFTER table + cache exist
 makeSortable(body, renderTable);
+}
 applyAllFilters();
 
 const ms = Date.now() - t0;
@@ -207,6 +208,10 @@ function applyZebraStriping() {
   });
 }
 
+function getCellText(row, index) {
+  return row.children[index]?.textContent.trim() || "";
+}
+
 function applyAllFilters() {
   const search = document.getElementById("search").value.toLowerCase().trim();
   const activeCat =
@@ -214,8 +219,8 @@ function applyAllFilters() {
 
   document.querySelectorAll("#tbody tr").forEach(row => {
     const text = row.textContent.toLowerCase();
-    const size = row.children[1]?.textContent.trim();
-    const grade = row.children[3]?.textContent.trim();
+    const size = getCellText(row, 1);   // Size column
+    const grade = getCellText(row, 3);  // Grade column
     const cat = row.dataset.category;
 
     let show = true;
