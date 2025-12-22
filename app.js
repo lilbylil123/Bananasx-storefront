@@ -374,7 +374,8 @@ document.getElementById("submitOrder")?.addEventListener("click", () => {
   try {
     const row = document.querySelector(".order-row");
 
-    const sku = row?.querySelector(".order-item")?.value;
+    const itemSelect = row?.querySelector(".order-item");
+    const name = itemSelect?.selectedOptions[0]?.textContent;
     const qty = Number(row?.querySelector(".order-qty")?.value || 0);
     const discord = document.getElementById("orderDiscord")?.value || "";
     const notes = document.getElementById("orderNotes")?.value || "";
@@ -384,23 +385,27 @@ document.getElementById("submitOrder")?.addEventListener("click", () => {
       return;
     }
 
-    // 
     fetch(API_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "text/plain"
-      },
-      body: JSON.stringify({ sku, qty, discord, notes })
-    });
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "text/plain"
+  },
+  body: JSON.stringify({
+    items: [
+      { name, qty }
+    ],
+    discord,
+    notes
+  })
+});
 
-    // set to always set to success app script workaround
-    alert("✅ Order sent to Discord. Please reach out to Kapitin to confirm.");
+
+    alert("✅ Order sent to Discord.\nInventory is handled manually.");
 
   } catch (err) {
     console.error(err);
     alert("Unexpected client error.");
   }
 });
-
 
