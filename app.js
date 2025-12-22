@@ -374,40 +374,30 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
   try {
     const row = document.querySelector(".order-row");
 
-    const name = row?.querySelector(".order-item")?.value;
+    const sku = row?.querySelector(".order-item")?.value;
     const qty = Number(row?.querySelector(".order-qty")?.value || 0);
 
     const discord = document.getElementById("orderDiscord")?.value || "";
     const notes = document.getElementById("orderNotes")?.value || "";
 
-    if (!name || qty <= 0) {
+    if (!sku || qty <= 0) {
       alert("Please select an item and quantity.");
       return;
     }
 
-    const payload = {
-      items: [
-        { name, qty }
-      ],
-      discord,
-      notes
-    };
-
-    const res = await fetch(API_URL, {
+    await fetch(API_URL, {
       method: "POST",
+      mode: "no-cors",
       headers: {
-  "Content-Type": "text/plain"
-   },
-      body: JSON.stringify(payload)
-
+        "Content-Type": "text/plain"
+      },
+      body: JSON.stringify({
+        sku,
+        qty,
+        discord,
+        notes
+      })
     });
-
-    const result = await res.json();
-
-    if (!result.success) {
-      alert(result.error || "Order failed");
-      return;
-    }
 
     alert("✅ Order sent to Discord. Inventory is handled manually.");
 
