@@ -237,9 +237,6 @@ function applyAllFilters() {
   applyZebraStriping();
 }
 
-function applyAllFilters() {
-  ...
-}
 
 /* ================= FILTER BUTTON HANDLERS ================= */
 
