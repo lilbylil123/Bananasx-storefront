@@ -8,7 +8,7 @@ const CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xm990HH7LTwD7X8YDM8oeG35kSGPNv0ZKEohbCdm9oDHzC77_v73RVR8KHWRa5udSKHb9oyqEc4o/pub?gid=613857331&single=true&output=csv"
   );
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyAsR6PLkwByf_zizuly2kreUV5sBrDN6qW3yBhKfeHwLuRxuzogbfjPruaAYvyPW_r/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwHvZ81c6H_UslBfSd9YUASYGYMP1vCBieb5avoOXUzS2571amPkoyQRNJcNoBV1uOabw/exec";
 const GOLD = "#ffcc00";
 
 // Cached inventory for order modal (not affected by filters)
@@ -329,6 +329,7 @@ function resetOrderModal() {
   orderItemsContainer.appendChild(row);
   populateOrderSelect(row.querySelector(".order-item"));
   recalcOrderTotals();
+  enforceUniqueSelections();
 }
 
 placeOrderBtn?.addEventListener("click", () => {
@@ -349,6 +350,7 @@ addOrderItemBtn?.addEventListener("click", () => {
   orderItemsContainer.appendChild(row);
   populateOrderSelect(row.querySelector(".order-item"));
   recalcOrderTotals();
+  enforceUniqueSelections();
 });
 
 orderItemsContainer?.addEventListener("input", e => {
@@ -357,6 +359,7 @@ orderItemsContainer?.addEventListener("input", e => {
     e.target.classList.contains("order-item")
   ) {
     recalcOrderTotals();
+    enforceUniqueSelections();
   }
 });
 
@@ -396,6 +399,26 @@ function populateOrderSelect(select) {
 });
 }
 
+function enforceUniqueSelections() {
+  const selects = [...document.querySelectorAll(".order-item")];
+
+  // Collect selected SKUs (values, not names)
+  const selected = selects.map(s => s.value).filter(Boolean);
+
+  selects.forEach(sel => {
+    [...sel.options].forEach(opt => {
+      if (!opt.value) return; // ignore "Select item…" option
+
+      // Disable option if selected in another dropdown
+      opt.disabled = selected.includes(opt.value) && opt.value !== sel.value;
+
+      // Keep OUT OF STOCK disabled no matter what
+      if (opt.dataset.stock && Number(opt.dataset.stock) <= 0) opt.disabled = true;
+    });
+  });
+}
+
+
 
 
 
@@ -425,6 +448,9 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
 
     const discord = document.getElementById("orderDiscord")?.value || "Unknown";
     const notes = document.getElementById("orderNotes")?.value || "None";
+    const delivery = document.getElementById("deliveryRequired")?.value || "No";
+    const orderTotal = document.getElementById("orderTotal")?.textContent || "0 aUEC";
+
 
     fetch(API_URL, {
   method: "POST",
@@ -435,7 +461,9 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
   body: JSON.stringify({
     items,
     discord,
-    notes
+    notes,
+    delivery,
+    orderTotal
   })
 });
 
