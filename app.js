@@ -397,18 +397,19 @@ function populateOrderSelect(select) {
 }
 
 
-
-
-document.getElementById("addItem")?.addEventListener("click", () => {
+document.getElementById("addOrderItem")?.addEventListener("click", () => {
   const container = document.getElementById("orderItems");
-  const rows = container.querySelectorAll(".order-row");
-  const lastRow = rows[rows.length - 1];
+  const template = document.getElementById("orderRowTemplate");
 
-  if (!lastRow) return;
+  if (!container || !template) return;
 
-  const newRow = lastRow.cloneNode(true);
+  const newRow = template.cloneNode(true);
 
-  // Reset values in the cloned row
+  // Make cloned row visible & unique
+  newRow.classList.remove("hidden");
+  newRow.removeAttribute("id");
+
+  // Reset values
   const itemSelect = newRow.querySelector(".order-item");
   const qtyInput = newRow.querySelector(".order-qty");
 
