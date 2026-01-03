@@ -398,6 +398,29 @@ function populateOrderSelect(select) {
 
 
 
+
+document.getElementById("addItem")?.addEventListener("click", () => {
+  const container = document.getElementById("orderItems");
+  const rows = container.querySelectorAll(".order-row");
+  const lastRow = rows[rows.length - 1];
+
+  if (!lastRow) return;
+
+  const newRow = lastRow.cloneNode(true);
+
+  // Reset values in the cloned row
+  const itemSelect = newRow.querySelector(".order-item");
+  const qtyInput = newRow.querySelector(".order-qty");
+
+  if (itemSelect) itemSelect.selectedIndex = 0;
+  if (qtyInput) qtyInput.value = 1;
+
+  container.appendChild(newRow);
+});
+
+
+
+
 /* =========================================================
    ORDER SUBMISSION (APPS SCRIPT → DISCORD ONLY)
 ========================================================= */
