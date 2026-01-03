@@ -402,36 +402,40 @@ function populateOrderSelect(select) {
    ORDER SUBMISSION (APPS SCRIPT → DISCORD ONLY)
 ========================================================= */
 
-document.getElementById("submitOrder")?.addEventListener("click", () => {
+document.getElementById("submitOrder")?.addEventListener("click", async () => {
   try {
-    const row = document.querySelector(".order-row");
+    const items = [];
 
-    const itemSelect = row?.querySelector(".order-item");
-    const name = itemSelect?.selectedOptions[0]?.textContent;
-    const qty = Number(row?.querySelector(".order-qty")?.value || 0);
-    const discord = document.getElementById("orderDiscord")?.value || "";
-    const notes = document.getElementById("orderNotes")?.value || "";
+    // ✅ Collect ALL order rows
+    document.querySelectorAll(".order-row").forEach(row => {
+      const itemSelect = row.querySelector(".order-item");
+      const name = itemSelect?.selectedOptions[0]?.textContent;
+      const qty = Number(row.querySelector(".order-qty")?.value || 0);
 
-    if (!name || qty <= 0) {
-      alert("Please select an item and quantity.");
+      if (name && qty > 0) {
+        items.push({ name, qty });
+      }
+    });
+
+    if (!items.length) {
+      alert("Please select at least one item and quantity.");
       return;
     }
 
-    fetch(API_URL, {
-  method: "POST",
-  mode: "no-cors",
-  headers: {
-    "Content-Type": "text/plain"
-  },
-  body: JSON.stringify({
-    items: [
-      { name, qty }
-    ],
-    discord,
-    notes
-  })
-});
+    const discord = document.getElementById("orderDiscord")?.value || "Unknown";
+    const notes = document.getElementById("orderNotes")?.value || "None";
 
+    await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        items,     // ✅ ARRAY of items
+        discord,
+        notes
+      })
+    });
 
     alert("✅ Order sent to Discord.\nPlease reach out to Kapitin via Discord for any questions.");
 
@@ -440,4 +444,5 @@ document.getElementById("submitOrder")?.addEventListener("click", () => {
     alert("Unexpected client error.");
   }
 });
+
 
