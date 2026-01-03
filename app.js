@@ -426,17 +426,18 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
     const discord = document.getElementById("orderDiscord")?.value || "Unknown";
     const notes = document.getElementById("orderNotes")?.value || "None";
 
-    await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        items,     // ✅ ARRAY of items
-        discord,
-        notes
-      })
-    });
+    fetch(API_URL, {
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "text/plain;charset=utf-8"
+  },
+  body: JSON.stringify({
+    items,
+    discord,
+    notes
+  })
+});
 
     alert("✅ Order sent to Discord.\nPlease reach out to Kapitin via Discord for any questions.");
 
