@@ -397,29 +397,6 @@ function populateOrderSelect(select) {
 }
 
 
-document.getElementById("addOrderItem")?.addEventListener("click", () => {
-  const container = document.getElementById("orderItems");
-  const template = document.getElementById("orderRowTemplate");
-
-  if (!container || !template) return;
-
-  const newRow = template.cloneNode(true);
-
-  // Make cloned row visible & unique
-  newRow.classList.remove("hidden");
-  newRow.removeAttribute("id");
-
-  // Reset values
-  const itemSelect = newRow.querySelector(".order-item");
-  const qtyInput = newRow.querySelector(".order-qty");
-
-  if (itemSelect) itemSelect.selectedIndex = 0;
-  if (qtyInput) qtyInput.value = 1;
-
-  container.appendChild(newRow);
-});
-
-
 
 
 /* =========================================================
