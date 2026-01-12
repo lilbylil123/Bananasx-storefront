@@ -123,6 +123,12 @@ td.muted {
   display: none;
 }
 
+/* Generic hide utility (used for Weapons mode, filters, columns, etc) */
+.is-hidden {
+  display: none !important;
+}
+
+
 /* === Header Hover Sort Effect === */
   thead th {
     cursor: pointer;
