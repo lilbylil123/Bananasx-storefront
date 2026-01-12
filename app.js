@@ -143,7 +143,7 @@ async function load() {
       tr.appendChild(td(r[iName]));
       tr.appendChild(td(r[iSize], "center"));
       tr.appendChild(td(r[iType]));
-      tr.appendChild(td(r[iGrade]));
+      tr.appendChild(td(r[iGrade], "col-grade"));
 
       const stockVal = Number(r[iStock] || 0);
       tr.appendChild(td(isFinite(stockVal) ? stockVal : r[iStock], "center"));
@@ -181,7 +181,7 @@ body.forEach(r => {
 
   // Enable sorting & filters AFTER table + cache exist
   makeSortable(body, renderTable);
-
+  updateWeaponsUI();  
   applyAllFilters();
 
   const ms = Date.now() - t0;
@@ -199,6 +199,36 @@ load();
 ========================================================= */
 
 let quickFilters = { size: "all", grade: "all" };
+
+function updateWeaponsUI() {
+  const activeCat =
+    document.querySelector(".cat-btn.active")?.dataset.category || "components";
+  const isWeapons = activeCat === "weapons";
+
+  // Hide the grade filter row (GRADE pills)
+  document
+    .getElementById("filter-grade")
+    ?.classList.toggle("is-hidden", isWeapons);
+
+  // Hide/show grade column header + all grade cells
+  document.querySelectorAll(".col-grade").forEach(el => {
+    el.classList.toggle("is-hidden", isWeapons);
+  });
+
+  // Reset grade filter when weapons is active
+  if (isWeapons) {
+    quickFilters.grade = "all";
+
+    document
+      .querySelectorAll('[data-filter="grade"]')
+      .forEach(b => b.classList.remove("active"));
+
+    document
+      .querySelector('[data-filter="grade"][data-value="all"]')
+      ?.classList.add("active");
+  }
+}
+
 
 function applyZebraStriping() {
   const rows = [...document.querySelectorAll("#tbody tr")]
@@ -219,6 +249,8 @@ function applyAllFilters() {
   const activeCat =
     document.querySelector(".cat-btn.active")?.dataset.category || "components";
 
+  const isWeapons = activeCat === "weapons";
+
   document.querySelectorAll("#tbody tr").forEach(row => {
     const text = row.textContent.toLowerCase();
     const size = getCellText(row, 1);   // Size column
@@ -229,7 +261,11 @@ function applyAllFilters() {
     if (search && !text.includes(search)) show = false;
     if (cat !== activeCat) show = false;
     if (quickFilters.size !== "all" && size !== quickFilters.size) show = false;
-    if (quickFilters.grade !== "all" && grade !== quickFilters.grade) show = false;
+
+    //  only apply grade filter when weapons is not selected
+    if (!isWeapons && quickFilters.grade !== "all" && grade !== quickFilters.grade) {
+      show = false;
+    }
 
     row.style.display = show ? "" : "none";
   });
@@ -260,7 +296,21 @@ document.querySelectorAll("[data-filter]").forEach(btn => {
   });
 });
 
+/* ================= CATEGORY BUTTON HANDLERS ================= */
 
+document.querySelectorAll(".cat-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    // Toggle active tab UI
+    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    // Update grade UI (hide/show) based on weapons/components
+    updateWeaponsUI();
+
+    // Re-apply filters (will switch categories)
+    applyAllFilters();
+  });
+});
 
 /* =========================================================
    PRICING & TOTAL CALCULATIONS
