@@ -564,3 +564,32 @@ input[type="number"] {
   color: var(--accent);
 }
 
+/* ===== Store Closed Banner ===== */
+.store-closed-banner {
+  margin: 16px auto;
+  padding: 14px 18px;
+  max-width: 960px;
+  text-align: center;
+
+  /* Option B look (red / locked) */
+  background: rgba(80, 20, 20, 0.35);
+  border: 1px solid rgba(255, 90, 90, 0.4);
+  border-left: 4px solid #ff5a5a;
+  border-radius: 10px;
+
+  font-family: "Orbitron", sans-serif;
+  color: var(--text);
+}
+
+.store-closed-banner strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.store-closed-banner span {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
