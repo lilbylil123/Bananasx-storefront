@@ -71,7 +71,7 @@ function formatPrice(x) {
 async function load() {
   const t0 = Date.now();
 
-  const res = await fetch(CSV_URL, { cache: "no-store", mode: "cors" });
+  const res = await fetch(`${CSV_URL}&_=${Date.now()}`, { cache: "no-store" });
   const txt = await res.text();
   const rows = parseCSV(txt).filter(r => r.length);
   if (!rows.length) return;
