@@ -3,13 +3,11 @@
 ========================================================= */
 
 const CSV_URL =
-  "https://corsproxy.io/?" +
-  encodeURIComponent(
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xm990HH7LTwD7X8YDM8oeG35kSGPNv0ZKEohbCdm9oDHzC77_v73RVR8KHWRa5udSKHb9oyqEc4o/pub?gid=613857331&single=true&output=csv"
-  );
-
-const API_URL = "https://script.google.com/macros/s/AKfycbwHvZ81c6H_UslBfSd9YUASYGYMP1vCBieb5avoOXUzS2571amPkoyQRNJcNoBV1uOabw/exec";
-const GOLD = "#ffcc00";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6xm990HH7LTwD7X8YDM8oeG35kSGPNv0ZKEohbCdm9oDHzC77_v73RVR8KHWRa5udSKHb9oyqEc4o/pub?output=csv&gid=613857331";
+const API_URL = 
+   "https://script.google.com/macros/s/AKfycbwHvZ81c6H_UslBfSd9YUASYGYMP1vCBieb5avoOXUzS2571amPkoyQRNJcNoBV1uOabw/exec";
+const GOLD = 
+   "#ffcc00";
 
 // Cached inventory for order modal (not affected by filters)
 let INVENTORY_ITEMS = [];
