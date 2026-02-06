@@ -117,6 +117,7 @@ async function load() {
         });
 
         render();
+        applyAllFilters();
         thEls.forEach(h => h.style.textDecoration = "");
         th.style.textDecoration = asc ? "underline" : "underline overline";
       });
@@ -271,6 +272,11 @@ function applyAllFilters() {
   applyZebraStriping();
 }
 
+/* ================= SEARCH INPUT HANDLER ================= */
+
+document.getElementById("search")?.addEventListener("input", () => {
+  applyAllFilters();
+});
 
 /* ================= FILTER BUTTON HANDLERS ================= */
 
