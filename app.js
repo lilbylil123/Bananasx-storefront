@@ -541,8 +541,6 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
    /* =========================================
    STORE CLOSED MODE
 ========================================= */
-const STORE_CLOSED = true;
-
 document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("storeClosedOverlay");
   const okBtn = document.getElementById("closedOkBtn");
