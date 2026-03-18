@@ -527,6 +527,41 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
     console.error(err);
     alert("Unexpected client error.");
   }
+   
+   /* =========================================
+   STORE CLOSED MODE
+========================================= */
+const STORE_CLOSED = true;
+
+document.addEventListener("DOMContentLoaded", () => {
+  const overlay = document.getElementById("storeClosedOverlay");
+  const okBtn = document.getElementById("closedOkBtn");
+  const placeOrderBtn = document.getElementById("placeOrderBtn");
+
+  if (STORE_CLOSED) {
+    // Keep overlay visible
+    if (overlay) {
+      overlay.style.display = "flex";
+    }
+
+    // Disable / hide order button
+    if (placeOrderBtn) {
+      placeOrderBtn.classList.add("disabled");
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.textContent = "ORDERING UNAVAILABLE";
+    }
+
+    // Allow user to dismiss popup but still keep ordering disabled
+    if (okBtn && overlay) {
+      okBtn.addEventListener("click", () => {
+        overlay.style.display = "none";
+      });
+    }
+  } else {
+    if (overlay) {
+      overlay.style.display = "none";
+    }
+  }
 });
 
 
