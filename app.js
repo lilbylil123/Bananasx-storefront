@@ -8,6 +8,7 @@ const API_URL =
    "https://script.google.com/macros/s/AKfycbwHvZ81c6H_UslBfSd9YUASYGYMP1vCBieb5avoOXUzS2571amPkoyQRNJcNoBV1uOabw/exec";
 const GOLD = 
    "#ffcc00";
+const STORE_CLOSE = true;
 
 // Cached inventory for order modal (not affected by filters)
 let INVENTORY_ITEMS = [];
@@ -387,6 +388,11 @@ function resetOrderModal() {
 }
 
 placeOrderBtn?.addEventListener("click", () => {
+  if (STORE_CLOSED) {
+    alert("Our storefront is currently closed until further notice. Ordering is unavailable at this time.");
+    return;
+  }
+
   resetOrderModal();
   orderModal.classList.remove("hidden");
 });
@@ -481,10 +487,14 @@ function enforceUniqueSelections() {
 ========================================================= */
 
 document.getElementById("submitOrder")?.addEventListener("click", async () => {
+  if (STORE_CLOSED) {
+    alert("Our storefront is currently closed until further notice. Ordering is unavailable at this time.");
+    return;
+  }
+
   try {
     const items = [];
 
-    // ✅ Collect ALL order rows
     document.querySelectorAll(".order-row").forEach(row => {
       const itemSelect = row.querySelector(".order-item");
       const name = itemSelect?.selectedOptions[0]?.textContent;
@@ -505,21 +515,20 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
     const delivery = document.getElementById("deliveryRequired")?.value || "No";
     const orderTotal = document.getElementById("orderTotal")?.textContent || "0 aUEC";
 
-
     fetch(API_URL, {
-  method: "POST",
-  mode: "no-cors",
-  headers: {
-    "Content-Type": "text/plain;charset=utf-8"
-  },
-  body: JSON.stringify({
-    items,
-    discord,
-    notes,
-    delivery,
-    orderTotal
-  })
-});
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify({
+        items,
+        discord,
+        notes,
+        delivery,
+        orderTotal
+      })
+    });
 
     alert("✅ Order sent to Discord.\nPlease reach out to Kapitin via Discord for any questions.");
 
@@ -527,6 +536,7 @@ document.getElementById("submitOrder")?.addEventListener("click", async () => {
     console.error(err);
     alert("Unexpected client error.");
   }
+});
    
    /* =========================================
    STORE CLOSED MODE
